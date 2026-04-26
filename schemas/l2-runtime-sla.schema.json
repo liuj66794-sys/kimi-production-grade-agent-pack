@@ -1,0 +1,188 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi.agent/schemas/l2-runtime-sla/v2.5.0",
+  "title": "L2 Runtime SLA Definition",
+  "description": "Schema for defining runtime SLA metrics and enforcement rules for L2 agents.",
+  "type": "object",
+  "required": ["version", "metrics", "enforcement_rules"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Schema version",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "metrics": {
+      "type": "array",
+      "description": "SLA metrics with thresholds",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "target", "unit"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Metric name",
+            "enum": [
+              "agent_activation_latency",
+              "response_time_simple",
+              "response_time_complex",
+              "error_rate",
+              "timeout_rate",
+              "availability",
+              "memory_store_latency",
+              "memory_retrieve_latency",
+              "slide_outline_latency",
+              "slide_deck_generation_latency",
+              "file_read_latency",
+              "analysis_latency",
+              "image_analysis_latency",
+              "chart_extraction_latency"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable description of the metric"
+          },
+          "agent": {
+            "type": "string",
+            "description": "Agent this metric applies to (or 'all' for global)",
+            "enum": ["all", "memory", "slide-maker", "spreadsheet", "multimodal"]
+          },
+          "target": {
+            "type": "number",
+            "description": "Target value (must meet or beat)",
+            "minimum": 0
+          },
+          "warning_threshold": {
+            "type": "number",
+            "description": "Warning level (exceeds target but not yet critical)",
+            "minimum": 0
+          },
+          "critical_threshold": {
+            "type": "number",
+            "description": "Critical level (requires immediate action)",
+            "minimum": 0
+          },
+          "unit": {
+            "type": "string",
+            "description": "Unit of measurement",
+            "enum": ["ms", "%", "requests_per_second", "bytes"]
+          },
+          "measurement_window": {
+            "type": "string",
+            "description": "Time window for measurement",
+            "enum": ["per_request", "per_minute", "per_hour", "per_day"],
+            "default": "per_request"
+          }
+        }
+      }
+    },
+    "enforcement_rules": {
+      "type": "array",
+      "description": "Rules for enforcing SLA compliance",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["rule_id", "name", "trigger_condition", "action"],
+        "properties": {
+          "rule_id": {
+            "type": "string",
+            "description": "Unique rule identifier",
+            "pattern": "^RULE-[A-Z]{2}-\\d{2}$"
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable rule name"
+          },
+          "trigger_condition": {
+            "type": "string",
+            "description": "Condition that triggers this rule"
+          },
+          "action": {
+            "type": "string",
+            "description": "Action taken when triggered"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["info", "warning", "critical", "emergency"],
+            "description": "Severity of this rule"
+          },
+          "cooldown_seconds": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Minimum time between repeated triggers",
+            "default": 60
+          },
+          "applies_to_agents": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["all", "memory", "slide-maker", "spreadsheet", "multimodal"]
+            },
+            "description": "Agents this rule applies to",
+            "default": ["all"]
+          }
+        }
+      }
+    },
+    "fallback_strategies": {
+      "type": "array",
+      "description": "Fallback strategies when SLA is breached",
+      "items": {
+        "type": "object",
+        "required": ["strategy_id", "name", "activation_condition"],
+        "properties": {
+          "strategy_id": {
+            "type": "string",
+            "pattern": "^FB-[A-Z]{2}-\\d{2}$"
+          },
+          "name": {
+            "type": "string"
+          },
+          "activation_condition": {
+            "type": "string",
+            "description": "When this fallback activates"
+          },
+          "action": {
+            "type": "string",
+            "description": "What the fallback does"
+          },
+          "output_marker": {
+            "type": "string",
+            "description": "Marker added to output indicating fallback was used",
+            "default": "[degraded]"
+          }
+        }
+      }
+    },
+    "circuit_breaker": {
+      "type": "object",
+      "description": "Circuit breaker configuration",
+      "required": ["failure_threshold", "cooldown_seconds"],
+      "properties": {
+        "failure_threshold": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Consecutive failures before opening circuit",
+          "default": 3
+        },
+        "cooldown_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Seconds to wait before probe request",
+          "default": 30
+        },
+        "probe_requests": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of probe requests to attempt before closing",
+          "default": 1
+        }
+      }
+    },
+    "defined_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+version: "1.0.0"
+agent:
+  name: spreadsheet-agent
+  description: Spreadsheet analysis and transformation
+  skills:
+    - spreadsheet
+    - spreadsheet-analysis
+    - swarm-orchestrator
+    - task-intake
+    - quality-review
+  subagents:
+    - analyst
+    - coder
+    - qa-reviewer

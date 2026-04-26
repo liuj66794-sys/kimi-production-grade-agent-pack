@@ -1,0 +1,25 @@
+{
+  "media_file": {
+    "filename": "example-filename",
+    "type": "image",
+    "format": "png",
+    "dimensions": {
+      "width": 1,
+      "height": 1
+    },
+    "size_bytes": 1
+  },
+  "findings": [
+    {
+      "category": "ui_element",
+      "description": "example description",
+      "confidence": "confirmed"
+    }
+  ],
+  "issues": [
+    {
+      "severity": "critical",
+      "description": "example description"
+    }
+  ]
+}

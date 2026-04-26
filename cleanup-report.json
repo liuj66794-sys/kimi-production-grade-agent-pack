@@ -1,0 +1,54 @@
+{
+  "report_type": "cleanup",
+  "timestamp": "2026-04-26T04:55:40.406496+00:00",
+  "dry_run": true,
+  "summary": {
+    "targets_cleaned": 2,
+    "total_files": 5,
+    "total_size_bytes": 3565,
+    "total_size_human": "3.5 KB"
+  },
+  "details": [
+    {
+      "path": "D:\\vscode\\Kimi\\kimi-production-grade-agent-pack\\runtime",
+      "exists": true,
+      "total_files": 5,
+      "total_dirs": 0,
+      "total_size": 3565,
+      "files": [
+        {
+          "path": "project-state.json",
+          "size": 792
+        },
+        {
+          "path": "roadmap.json",
+          "size": 1066
+        },
+        {
+          "path": "run-state.json",
+          "size": 228
+        },
+        {
+          "path": "task-events-root.integration_smoke_001.jsonl",
+          "size": 1118
+        },
+        {
+          "path": "test-write.jsonl",
+          "size": 361
+        }
+      ],
+      "dry_run": true,
+      "cleaned": false
+    },
+    {
+      "path": "D:\\vscode\\Kimi\\kimi-production-grade-agent-pack\\artifacts",
+      "exists": false,
+      "total_files": 0,
+      "total_dirs": 0,
+      "total_size": 0,
+      "files": [],
+      "dry_run": true,
+      "cleaned": false
+    }
+  ]
+}

@@ -1,0 +1,283 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi-agent-pack/schemas/report-quality.schema.json",
+  "title": "Report Quality Score",
+  "description": "Schema for the report quality assessment output",
+  "type": "object",
+  "required": [
+    "report_id",
+    "version",
+    "timestamp",
+    "word_count",
+    "section_count",
+    "citation_count",
+    "quality_dimensions",
+    "total_score",
+    "passed_threshold"
+  ],
+  "properties": {
+    "report_id": {
+      "type": "string",
+      "description": "Unique identifier for the report being assessed"
+    },
+    "version": {
+      "type": "string",
+      "description": "Schema version",
+      "enum": ["1.4", "1.5"]
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 timestamp of quality assessment"
+    },
+    "word_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total word count of the report"
+    },
+    "section_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of sections in the report"
+    },
+    "citation_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of citations in the report"
+    },
+    "paragraph_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of paragraphs in the report"
+    },
+    "code_block_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of code blocks in the report"
+    },
+    "table_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of tables in the report"
+    },
+    "uncertainty_annotation_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of uncertainty annotations"
+    },
+    "quality_dimensions": {
+      "type": "object",
+      "required": [
+        "structure_completeness",
+        "citation_quality",
+        "uncertainty_annotation",
+        "format_consistency",
+        "content_richness",
+        "traceability"
+      ],
+      "properties": {
+        "structure_completeness": {
+          "type": "object",
+          "required": ["score", "findings"],
+          "properties": {
+            "score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 20,
+              "description": "Structure completeness score (0-20)"
+            },
+            "findings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Detailed findings for this dimension"
+            },
+            "required_sections_present": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9,
+              "description": "Number of required sections present (max 9)"
+            },
+            "missing_sections": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of missing required sections"
+            }
+          }
+        },
+        "citation_quality": {
+          "type": "object",
+          "required": ["score", "findings"],
+          "properties": {
+            "score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 20,
+              "description": "Citation quality score (0-20)"
+            },
+            "findings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Detailed findings for this dimension"
+            },
+            "valid_citations": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Number of properly formatted citations"
+            },
+            "invalid_citations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "List of invalid citation strings"
+            }
+          }
+        },
+        "uncertainty_annotation": {
+          "type": "object",
+          "required": ["score", "findings"],
+          "properties": {
+            "score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 15,
+              "description": "Uncertainty annotation score (0-15)"
+            },
+            "findings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Detailed findings for this dimension"
+            },
+            "annotations_found": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Number of uncertainty annotations found"
+            }
+          }
+        },
+        "format_consistency": {
+          "type": "object",
+          "required": ["score", "findings"],
+          "properties": {
+            "score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 15,
+              "description": "Format consistency score (0-15)"
+            },
+            "findings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Detailed findings for this dimension"
+            },
+            "code_blocks_with_language": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Code blocks with language tags"
+            },
+            "code_blocks_without_language": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Code blocks without language tags"
+            },
+            "tables_with_header": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Tables with proper headers"
+            },
+            "tables_without_header": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Tables without proper headers"
+            }
+          }
+        },
+        "content_richness": {
+          "type": "object",
+          "required": ["score", "findings"],
+          "properties": {
+            "score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 15,
+              "description": "Content richness score (0-15)"
+            },
+            "findings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Detailed findings for this dimension"
+            }
+          }
+        },
+        "traceability": {
+          "type": "object",
+          "required": ["score", "findings"],
+          "properties": {
+            "score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 15,
+              "description": "Traceability score (0-15)"
+            },
+            "findings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Detailed findings for this dimension"
+            },
+            "evidence_map_references": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Number of evidence map references"
+            }
+          }
+        }
+      }
+    },
+    "total_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Total quality score (0-100)"
+    },
+    "passed_threshold": {
+      "type": "boolean",
+      "description": "Whether the report passed the quality threshold (>=70)"
+    },
+    "threshold_used": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "default": 70,
+      "description": "Quality threshold used for assessment"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional metadata about the assessment",
+      "properties": {
+        "assessed_by": {
+          "type": "string",
+          "description": "Who/what performed the assessment"
+        },
+        "assessment_method": {
+          "type": "string",
+          "enum": ["automated", "hybrid", "manual"],
+          "description": "Method used for assessment"
+        }
+      }
+    }
+  }
+}

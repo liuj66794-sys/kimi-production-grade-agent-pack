@@ -1,0 +1,132 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi.agent/schemas/weekly-report.schema.json",
+  "title": "WeeklyReport",
+  "description": "Weekly activity report for the L4 agent system",
+  "type": "object",
+  "required": ["version", "report_period_start", "report_period_end", "generated_at"],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Schema version of the weekly report"
+    },
+    "report_period_start": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Start of the reporting period"
+    },
+    "report_period_end": {
+      "type": "string",
+      "format": "date-time",
+      "description": "End of the reporting period"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this report was generated"
+    },
+    "project": {
+      "type": "object",
+      "required": ["name", "version", "status", "autonomy_level"],
+      "properties": {
+        "name": { "type": "string" },
+        "version": { "type": "string" },
+        "status": { "type": "string" },
+        "autonomy_level": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "sprint": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "task_stats": {
+      "type": "object",
+      "required": ["completed", "failed", "blocked", "in_progress", "total"],
+      "properties": {
+        "completed": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "blocked": { "type": "integer", "minimum": 0 },
+        "in_progress": { "type": "integer", "minimum": 0 },
+        "total": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "type"],
+        "properties": {
+          "name": { "type": "string" },
+          "type": { "type": "string" },
+          "path": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "anomalies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "description", "severity"],
+        "properties": {
+          "type": { "type": "string" },
+          "description": { "type": "string" },
+          "severity": {
+            "type": "string",
+            "enum": ["critical", "high", "medium", "low"]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "pending_approvals": {
+      "type": "array",
+      "items": {
+        "$ref": "https://kimi.agent/schemas/hitl-approval.schema.json"
+      }
+    },
+    "context_budget": {
+      "type": "object",
+      "properties": {
+        "hot": {
+          "type": "object",
+          "properties": {
+            "used": { "type": "integer" },
+            "limit": { "type": "integer" },
+            "pct": { "type": "number" }
+          }
+        },
+        "warm": {
+          "type": "object",
+          "properties": {
+            "used": { "type": "integer" },
+            "limit": { "type": "integer" },
+            "pct": { "type": "number" }
+          }
+        },
+        "total": {
+          "type": "object",
+          "properties": {
+            "used": { "type": "integer" },
+            "limit": { "type": "integer" },
+            "pct": { "type": "number" }
+          }
+        }
+      }
+    },
+    "recommendations": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Recommended next steps"
+    }
+  },
+  "additionalProperties": false
+}

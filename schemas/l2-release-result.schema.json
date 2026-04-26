@@ -1,0 +1,151 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi.agent/schemas/l2-release-result/v2.5.0",
+  "title": "L2 Release Validation Result",
+  "description": "Schema for L2 release validation check results, verifying L1 integrity, L2 agent readiness, and production safety.",
+  "type": "object",
+  "required": ["version", "checked_at", "checks", "l1_integrity", "l2_agent_enabled", "overall_status"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Pack version being validated",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "checked_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Validation timestamp"
+    },
+    "checks": {
+      "type": "array",
+      "description": "Individual validation checks",
+      "items": {
+        "type": "object",
+        "required": ["name", "pass"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Check name"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["l1_integrity", "l2_agent_config", "l2_skill_check", "schema_validation", "script_verification", "memory_safety", "documentation", "security_review"],
+            "description": "Check category"
+          },
+          "pass": {
+            "type": "boolean",
+            "description": "Whether the check passed"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Additional details"
+          },
+          "files_checked": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Files validated in this check"
+          },
+          "errors": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Errors found (if any)"
+          }
+        }
+      }
+    },
+    "l1_integrity": {
+      "type": "boolean",
+      "description": "Whether L1 base functionality is intact"
+    },
+    "l2_agent_enabled": {
+      "type": "object",
+      "description": "Which L2 agents are enabled",
+      "properties": {
+        "memory": {
+          "type": "boolean",
+          "description": "Memory agent enabled (should be FALSE in production)"
+        },
+        "slide_maker": {
+          "type": "boolean",
+          "description": "Slide Maker agent enabled"
+        },
+        "spreadsheet": {
+          "type": "boolean",
+          "description": "Spreadsheet agent enabled"
+        },
+        "multimodal": {
+          "type": "boolean",
+          "description": "Multimodal agent enabled"
+        }
+      }
+    },
+    "memory_active": {
+      "type": "boolean",
+      "description": "Whether persistent memory is active (must be FALSE for production release)"
+    },
+    "overall_status": {
+      "type": "string",
+      "enum": ["ready", "not_ready", "blocked"],
+      "description": "Overall release readiness status"
+    },
+    "blockers": {
+      "type": "array",
+      "description": "Issues blocking release",
+      "items": {
+        "type": "object",
+        "required": ["severity", "description"],
+        "properties": {
+          "severity": {
+            "type": "string",
+            "enum": ["critical", "high", "medium", "low"]
+          },
+          "description": { "type": "string" },
+          "category": {
+            "type": "string",
+            "enum": ["l1_integrity", "l2_agent_config", "l2_skill_check", "schema_validation", "script_verification", "memory_safety", "documentation", "security_review"]
+          },
+          "suggested_fix": { "type": "string" }
+        }
+      }
+    },
+    "file_completeness": {
+      "type": "object",
+      "description": "Expected vs actual file counts",
+      "properties": {
+        "expected_count": { "type": "integer", "minimum": 0 },
+        "actual_count": { "type": "integer", "minimum": 0 },
+        "missing_files": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "unexpected_files": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "schema_validation_summary": {
+      "type": "object",
+      "description": "Schema validation results",
+      "properties": {
+        "schemas_checked": { "type": "integer", "minimum": 0 },
+        "schemas_valid": { "type": "integer", "minimum": 0 },
+        "schemas_invalid": { "type": "integer", "minimum": 0 },
+        "invalid_details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "schema_file": { "type": "string" },
+              "error": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "report_path": {
+      "type": "string",
+      "description": "Path to detailed release validation report"
+    }
+  }
+}

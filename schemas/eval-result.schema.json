@@ -1,0 +1,109 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi-moonshot.ai/schemas/eval-result.schema.json",
+  "title": "Eval Result",
+  "description": "Schema for evaluation results of the agent pack",
+  "type": "object",
+  "required": [
+    "eval_id",
+    "pack_version",
+    "runner",
+    "model_name",
+    "run_timestamp",
+    "pass",
+    "hard_fail",
+    "score",
+    "missing_fields",
+    "notes"
+  ],
+  "properties": {
+    "eval_id": {
+      "type": "string",
+      "description": "Unique identifier for this evaluation run"
+    },
+    "pack_version": {
+      "type": "string",
+      "description": "Version of the agent pack being evaluated"
+    },
+    "runner": {
+      "type": "string",
+      "description": "Name or identifier of the entity running the eval"
+    },
+    "model_name": {
+      "type": "string",
+      "description": "Name of the model used for the evaluation"
+    },
+    "run_timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of when the eval was run"
+    },
+    "prompt_hash": {
+      "type": "string",
+      "description": "Hash of the prompt used for reproducibility"
+    },
+    "skill_hash": {
+      "type": "string",
+      "description": "Hash of the skill definitions used"
+    },
+    "agent_config_hash": {
+      "type": "string",
+      "description": "Hash of the agent configuration used"
+    },
+    "pass": {
+      "type": "boolean",
+      "description": "Whether the eval passed overall"
+    },
+    "hard_fail": {
+      "type": "boolean",
+      "description": "Whether any hard fail conditions were triggered"
+    },
+    "score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Overall score (0-100)"
+    },
+    "missing_fields": {
+      "type": "array",
+      "description": "List of required fields that were missing from the output",
+      "items": { "type": "string" }
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes about the eval run"
+    },
+    "variance_note": {
+      "type": "string",
+      "description": "Notes on variance between expected and actual output"
+    },
+    "detailed_results": {
+      "type": "array",
+      "description": "Detailed results for each test case",
+      "items": {
+        "type": "object",
+        "required": ["test_id", "pass", "score"],
+        "properties": {
+          "test_id": { "type": "string" },
+          "pass": { "type": "boolean" },
+          "score": { "type": "number" },
+          "missing_fields": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "notes": { "type": "string" },
+          "duration_seconds": { "type": "integer" }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "environment": { "type": "string" },
+        "python_version": { "type": "string" },
+        "os": { "type": "string" }
+      }
+    }
+  },
+  "additionalProperties": false
+}

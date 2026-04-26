@@ -1,0 +1,141 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi.agent/schemas/data-quality-result/v2.3.0",
+  "title": "Data Quality Result",
+  "description": "Structured data quality assessment result covering completeness, consistency, and accuracy dimensions with scoring.",
+  "type": "object",
+  "required": ["filename", "overall_score", "overall_rating", "dimensions"],
+  "properties": {
+    "filename": {
+      "type": "string",
+      "description": "Name of the evaluated file"
+    },
+    "overall_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Weighted overall quality score (0-100)"
+    },
+    "overall_rating": {
+      "type": "string",
+      "enum": ["Excellent", "Good", "Fair", "Poor", "Critical"],
+      "description": "Qualitative overall rating"
+    },
+    "dimensions": {
+      "type": "array",
+      "description": "Quality dimension breakdown",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["name", "score", "rating", "issues"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": ["Completeness", "Consistency", "Accuracy"],
+            "description": "Quality dimension name"
+          },
+          "score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Score for this dimension (0-100)"
+          },
+          "rating": {
+            "type": "string",
+            "enum": ["Excellent", "Good", "Fair", "Poor", "Critical"],
+            "description": "Qualitative rating"
+          },
+          "weight": {
+            "type": "number",
+            "description": "Weight used in overall score calculation",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "checks": {
+            "type": "array",
+            "description": "Individual checks performed in this dimension",
+            "items": {
+              "type": "object",
+              "required": ["check_name", "result"],
+              "properties": {
+                "check_name": {
+                  "type": "string",
+                  "description": "Name of the check"
+                },
+                "result": {
+                  "type": "string",
+                  "enum": ["passed", "failed", "warning", "not_applicable"],
+                  "description": "Check result"
+                },
+                "details": {
+                  "type": "string",
+                  "description": "Additional details about the check result"
+                },
+                "affected_columns": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "description": "Columns affected by this issue"
+                }
+              }
+            }
+          },
+          "issues": {
+            "type": "array",
+            "description": "Detected issues in this dimension",
+            "items": {
+              "type": "object",
+              "required": ["description", "severity"],
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "description": "Human-readable issue description"
+                },
+                "severity": {
+                  "type": "string",
+                  "enum": ["info", "low", "medium", "high", "critical"],
+                  "description": "Issue severity"
+                },
+                "affected_columns": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "description": "Columns affected"
+                },
+                "recommendation": {
+                  "type": "string",
+                  "description": "Suggested remediation"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "recommendations": {
+      "type": "array",
+      "description": "Prioritized actionable recommendations",
+      "items": {
+        "type": "object",
+        "required": ["priority", "description"],
+        "properties": {
+          "priority": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Priority rank (1 = highest)"
+          },
+          "description": {
+            "type": "string"
+          },
+          "affected_dimension": {
+            "type": "string",
+            "enum": ["Completeness", "Consistency", "Accuracy"]
+          }
+        }
+      }
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

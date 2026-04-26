@@ -1,0 +1,34 @@
+# Render Blueprint for Kimi Agent Pack Dashboard API
+# Deploy: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: kimi-agent-pack-api
+    runtime: docker
+    plan: standard
+    dockerfilePath: ./apps/backend/Dockerfile
+    dockerContext: .
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: kimi-agent-pack-db
+          property: connectionString
+      - key: KIMI_API_HOST
+        value: 0.0.0.0
+      - key: KIMI_API_PORT
+        value: 8000
+      - key: KIMI_CORS_ORIGINS
+        value: https://your-vercel-app.vercel.app
+      - key: KIMI_MAX_CONCURRENT_JOBS
+        value: 3
+      - key: KIMI_SCRIPT_TIMEOUT
+        value: 300
+      - key: PYTHONUNBUFFERED
+        value: "1"
+    healthCheckPath: /health
+    autoDeploy: true
+
+databases:
+  - name: kimi-agent-pack-db
+    plan: starter
+    ipAllowList: []  # Required for Render services to connect

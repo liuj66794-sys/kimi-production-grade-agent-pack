@@ -1,0 +1,44 @@
+{
+  "file_info": {
+    "filename": "example-filename",
+    "format": "csv",
+    "encoding": "example encoding",
+    "size_bytes": 1,
+    "row_count": 1,
+    "column_count": 1
+  },
+  "columns": [
+    {
+      "name": "example-name",
+      "type": "numeric",
+      "null_count": 1,
+      "unique_count": 1
+    }
+  ],
+  "summary": {
+    "total_rows": 1,
+    "total_columns": 1,
+    "total_cells": 1,
+    "total_nulls": 1,
+    "null_ratio": 1.0
+  },
+  "anomalies": [
+    {
+      "column": "example column",
+      "type": "outlier_iqr",
+      "method": "example method",
+      "details": {
+        "count": 1,
+        "ratio": 1.0,
+        "examples": [
+          "item-examples-1"
+        ],
+        "bounds": {
+          "lower": 1.0,
+          "upper": 1.0
+        },
+        "threshold": 1.0
+      }
+    }
+  ]
+}

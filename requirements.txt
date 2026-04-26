@@ -1,0 +1,14 @@
+# Kimi Agent Pack — Python Dependencies
+# Install: pip install -r requirements.txt
+
+# Core framework (optional but recommended)
+openai>=1.0.0
+
+# Backend API (apps/backend/)
+fastapi>=0.104.0
+uvicorn>=0.24.0
+pydantic>=2.5.0
+python-multipart>=0.0.6
+
+# Testing
+pytest>=7.0.0

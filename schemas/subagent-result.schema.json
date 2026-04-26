@@ -1,0 +1,206 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi-moonshot.ai/schemas/subagent-result.schema.json",
+  "title": "Sub-agent Result",
+  "description": "Schema for sub-agent output contract. Every sub-agent MUST return a result conforming to this schema.",
+  "type": "object",
+  "required": [
+    "task_id",
+    "agent",
+    "status",
+    "conclusion",
+    "evidence",
+    "artifacts",
+    "context_snapshot",
+    "intermediate_artifacts",
+    "blockers",
+    "assumptions",
+    "next_step"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "description": "Unique identifier of the delegated task"
+    },
+    "agent": {
+      "type": "string",
+      "description": "Name or identifier of the sub-agent that executed the task"
+    },
+    "status": {
+      "type": "string",
+      "description": "Completion status of the sub-task",
+      "enum": ["completed", "partial", "failed", "blocked", "timeout"]
+    },
+    "conclusion": {
+      "type": "array",
+      "description": "Ordered list of conclusion statements derived from the task",
+      "items": {
+        "type": "object",
+        "required": ["statement"],
+        "properties": {
+          "statement": { "type": "string" },
+          "confidence": {
+            "type": "string",
+            "enum": ["high", "medium", "low", "uncertain"]
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["critical", "important", "informational"]
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "description": "Evidence items supporting the conclusions",
+      "items": {
+        "type": "object",
+        "required": [
+          "claim",
+          "source",
+          "source_type",
+          "confidence",
+          "caveat"
+        ],
+        "properties": {
+          "claim": {
+            "type": "string",
+            "description": "The specific claim being made"
+          },
+          "source": {
+            "type": "string",
+            "description": "URL, file path, or reference to the source"
+          },
+          "source_type": {
+            "type": "string",
+            "enum": [
+              "web_page",
+              "document",
+              "code_output",
+              "database",
+              "api_response",
+              "human_input",
+              "inferred",
+              "assumption"
+            ]
+          },
+          "confidence": {
+            "type": "string",
+            "enum": ["high", "medium", "low", "unverified"]
+          },
+          "caveat": {
+            "type": "string",
+            "description": "Known limitations or caveats for this evidence item"
+          }
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "description": "Final artifacts produced by the sub-agent",
+      "items": {
+        "type": "object",
+        "required": ["type", "path", "description"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "file",
+              "code",
+              "table",
+              "chart",
+              "document",
+              "image",
+              "json",
+              "markdown",
+              "ppt_outline"
+            ]
+          },
+          "path": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "context_snapshot": {
+      "type": "object",
+      "description": "Snapshot of context available to the sub-agent during execution",
+      "required": ["input_files", "search_queries", "tools_used"],
+      "properties": {
+        "input_files": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "search_queries": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "tools_used": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "intermediate_artifacts": {
+      "type": "array",
+      "description": "Intermediate artifacts that were generated but may not be kept",
+      "items": {
+        "type": "object",
+        "required": ["path", "description", "kept"],
+        "properties": {
+          "path": { "type": "string" },
+          "description": { "type": "string" },
+          "kept": {
+            "type": "boolean",
+            "description": "Whether this artifact is retained in the final output"
+          }
+        }
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "description": "Issues that blocked or impeded task execution",
+      "items": {
+        "type": "object",
+        "required": ["description"],
+        "properties": {
+          "description": { "type": "string" },
+          "severity": {
+            "type": "string",
+            "enum": ["blocking", "major", "minor"]
+          },
+          "resolution": { "type": "string" }
+        }
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "description": "Assumptions made during task execution",
+      "items": {
+        "type": "object",
+        "required": ["assumption"],
+        "properties": {
+          "assumption": { "type": "string" },
+          "rationale": { "type": "string" },
+          "risk": {
+            "type": "string",
+            "enum": ["low", "medium", "high"]
+          }
+        }
+      }
+    },
+    "next_step": {
+      "type": "string",
+      "description": "Recommended next step or action item"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "start_time": { "type": "string", "format": "date-time" },
+        "end_time": { "type": "string", "format": "date-time" },
+        "token_usage": { "type": "integer" },
+        "steps_taken": { "type": "integer" }
+      }
+    }
+  },
+  "additionalProperties": false
+}

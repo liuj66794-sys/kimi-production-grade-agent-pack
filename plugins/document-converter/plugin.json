@@ -1,0 +1,63 @@
+{
+  "$schema": "https://kimi-moonshot.ai/schemas/plugin.schema.json",
+  "name": "document-converter",
+  "version": "1.0.0",
+  "description": "Document format conversion plugin. Converts between various document formats including Markdown, HTML, PDF, DOCX, and structured text.",
+  "author": "Kimi Team",
+  "license": "MIT",
+  "entry_point": "main.py",
+  "capabilities": [
+    "markdown_to_html",
+    "html_to_markdown",
+    "markdown_to_pdf",
+    "docx_to_markdown",
+    "table_extraction",
+    "format_normalization"
+  ],
+  "config_schema": {
+    "type": "object",
+    "properties": {
+      "default_input_format": {
+        "type": "string",
+        "enum": ["markdown", "html", "pdf", "docx", "txt"],
+        "description": "Default input format",
+        "default": "markdown"
+      },
+      "default_output_format": {
+        "type": "string",
+        "enum": ["markdown", "html", "pdf", "docx", "txt", "json"],
+        "description": "Default output format",
+        "default": "markdown"
+      },
+      "preserve_formatting": {
+        "type": "boolean",
+        "description": "Preserve original formatting where possible",
+        "default": true
+      },
+      "extract_tables": {
+        "type": "boolean",
+        "description": "Extract tables as structured data",
+        "default": true
+      },
+      "extract_images": {
+        "type": "boolean",
+        "description": "Extract images from documents",
+        "default": false
+      },
+      "encoding": {
+        "type": "string",
+        "description": "Text encoding",
+        "default": "utf-8"
+      }
+    },
+    "required": []
+  },
+  "dependencies": [],
+  "mcp_servers": [
+    "filesystem-mcp"
+  ],
+  "permissions": [
+    "fs:read",
+    "fs:write"
+  ]
+}

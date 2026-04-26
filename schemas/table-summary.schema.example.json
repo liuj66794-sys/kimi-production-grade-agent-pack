@@ -1,0 +1,13 @@
+{
+  "filename": "example-filename",
+  "overview": "example overview",
+  "columns": [
+    {
+      "name": "example-name",
+      "description": "example description",
+      "type": "example type",
+      "completeness": "Excellent"
+    }
+  ],
+  "data_quality_narrative": "example data_quality_narrative"
+}

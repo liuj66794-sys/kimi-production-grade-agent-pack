@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi.agent.pack/schemas/slide-review.schema.json",
+  "title": "Slide Review",
+  "description": "PPT审查结果，包含各维度评分和hard fail检查",
+  "type": "object",
+  "required": ["review_id", "slide_deck_id", "status", "dimensions", "hard_fails", "reviewed_at"],
+  "properties": {
+    "review_id": {
+      "type": "string",
+      "description": "审查唯一标识符",
+      "pattern": "^sr-[0-9]{8}-[0-9]{3,}$"
+    },
+    "slide_deck_id": {
+      "type": "string",
+      "description": "被审查的slide deck ID"
+    },
+    "reviewer": {
+      "type": "string",
+      "description": "执行审查的agent名称",
+      "enum": ["slide-maker"]
+    },
+    "status": {
+      "type": "string",
+      "description": "审查结论",
+      "enum": ["pass", "pass_with_notes", "fail", "hard_fail"]
+    },
+    "dimensions": {
+      "type": "array",
+      "description": "各审查维度的评分",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["name", "score", "notes"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "审查维度名称",
+            "enum": ["narrative_coherence", "single_point_per_slide", "source_attribution", "risk_disclosure", "visual_design"]
+          },
+          "score": {
+            "type": "integer",
+            "description": "维度评分（1-5）",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "notes": {
+            "type": "string",
+            "description": "该维度的审查评语"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "hard_fails": {
+      "type": "array",
+      "description": "触发的hard fail列表",
+      "items": {
+        "type": "object",
+        "required": ["type", "description", "location"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "hard fail类型",
+            "enum": ["content_detached", "missing_source", "hidden_risk", "certainty_misrepresentation"]
+          },
+          "description": {
+            "type": "string",
+            "description": "hard fail详细描述"
+          },
+          "location": {
+            "type": "string",
+            "description": "问题所在位置（slide_id）"
+          },
+          "severity": {
+            "type": "string",
+            "description": "严重程度",
+            "enum": ["critical", "major"],
+            "default": "critical"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "weighted_score": {
+      "type": "number",
+      "description": "加权总分（1.0-5.0）",
+      "minimum": 1.0,
+      "maximum": 5.0
+    },
+    "improvement_notes": {
+      "type": "array",
+      "description": "改进建议（status为pass_with_notes或fail时）",
+      "items": {
+        "type": "string"
+      }
+    },
+    "reviewed_at": {
+      "type": "string",
+      "description": "审查完成时间，ISO 8601格式",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

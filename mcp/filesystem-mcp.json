@@ -1,0 +1,77 @@
+{
+  "$schema": "https://kimi-moonshot.ai/schemas/mcp-server.schema.json",
+  "name": "filesystem-mcp",
+  "version": "1.0.0",
+  "description": "Model Context Protocol server for filesystem operations. Provides file read, write, search, and directory management capabilities.",
+  "transport": {
+    "type": "stdio",
+    "command": "python",
+    "args": ["-m", "filesystem_mcp.server"]
+  },
+  "capabilities": {
+    "tools": [
+      {
+        "name": "file_read",
+        "description": "Read the contents of a file",
+        "parameters": {
+          "path": { "type": "string", "description": "File path to read" },
+          "offset": { "type": "integer", "description": "Line offset to start reading", "optional": true },
+          "limit": { "type": "integer", "description": "Maximum lines to read", "optional": true }
+        }
+      },
+      {
+        "name": "file_write",
+        "description": "Write content to a file",
+        "parameters": {
+          "path": { "type": "string", "description": "File path to write" },
+          "content": { "type": "string", "description": "Content to write" },
+          "append": { "type": "boolean", "description": "Append instead of overwrite", "optional": true }
+        }
+      },
+      {
+        "name": "file_list",
+        "description": "List files in a directory",
+        "parameters": {
+          "path": { "type": "string", "description": "Directory path" },
+          "recursive": { "type": "boolean", "description": "List recursively", "optional": true }
+        }
+      },
+      {
+        "name": "file_search",
+        "description": "Search for files matching a pattern",
+        "parameters": {
+          "pattern": { "type": "string", "description": "Search pattern (glob)" },
+          "path": { "type": "string", "description": "Directory to search in", "optional": true }
+        }
+      },
+      {
+        "name": "file_delete",
+        "description": "Delete a file",
+        "parameters": {
+          "path": { "type": "string", "description": "File path to delete" }
+        }
+      },
+      {
+        "name": "directory_create",
+        "description": "Create a directory",
+        "parameters": {
+          "path": { "type": "string", "description": "Directory path to create" }
+        }
+      },
+      {
+        "name": "directory_delete",
+        "description": "Delete a directory",
+        "parameters": {
+          "path": { "type": "string", "description": "Directory path to delete" },
+          "recursive": { "type": "boolean", "description": "Delete recursively", "optional": true }
+        }
+      }
+    ],
+    "resources": []
+  },
+  "config": {
+    "allowed_paths": ["./workspace", "./output", "./evals"],
+    "max_file_size_mb": 50,
+    "encoding": "utf-8"
+  }
+}

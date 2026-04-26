@@ -1,0 +1,55 @@
+version: 1
+agent:
+  extend: default
+  name: production-coordinator
+  system_prompt_path: ./system.md
+
+  skills:
+    - deep-research
+    - swarm-orchestrator
+    - task-intake
+    - quality-review
+    - spreadsheet-model
+    - multi-format-deliverable-flow
+    - document-writer
+    - final-packaging
+    - eval-runner
+    - memory-and-context
+    - document-to-skill-flow
+    - deep-research-report-flow
+    - multimodal-analysis
+    - build-web-app-flow
+    - product-builder
+    - memory-retraction
+    - slide-deck
+
+  subagents:
+    researcher:
+      path: ./researcher-sub.yaml
+      description: "检索、资料筛选、来源可信度判断、事实核查"
+    analyst:
+      path: ./analyst-sub.yaml
+      description: "结构化分析、商业推理、数据建模、战略判断"
+    coder:
+      path: ./coder-sub.yaml
+      description: "代码实现、测试、调试、重构、工程交付"
+    writer:
+      path: ./writer-sub.yaml
+      description: "长文写作、报告结构、叙事表达、编辑润色"
+    qa-reviewer:
+      path: ./qa-reviewer-sub.yaml
+      description: "事实、逻辑、格式、完整性、可交付性审查"
+
+    # L2/L3 子 Agent 在后续版本启用：
+    # slide-maker:
+    #   path: ./slide-maker-sub.yaml
+    #   description: "PPT 叙事、页面结构、图表表达、演讲备注"
+    # spreadsheet:
+    #   path: ./spreadsheet-sub.yaml
+    #   description: "Excel/CSV 建模、公式、审计检查、仪表盘"
+    # memory-curator:
+    #   path: ./memory-curator-sub.yaml
+    #   description: "沉淀项目记忆、模板、规范、可复用经验"
+    # multimodal:
+    #   path: ./multimodal-sub.yaml
+    #   description: "图片、视频、截图、图表、界面视觉分析"

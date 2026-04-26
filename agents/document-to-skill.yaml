@@ -1,0 +1,14 @@
+version: "1.0.0"
+agent:
+  name: document-to-skill
+  description: Convert documents to executable skill specifications
+  skills:
+    - document-to-skill
+    - document-conversion
+    - swarm-orchestrator
+    - task-intake
+    - quality-review
+  subagents:
+    - researcher
+    - writer
+    - qa-reviewer

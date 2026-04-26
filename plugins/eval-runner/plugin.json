@@ -1,0 +1,58 @@
+{
+  "$schema": "https://kimi-moonshot.ai/schemas/plugin.schema.json",
+  "name": "eval-runner",
+  "version": "1.0.0",
+  "description": "Evaluation runner plugin. Executes evaluation suites against the agent and produces structured evaluation reports with hard-fail detection.",
+  "author": "Kimi Team",
+  "license": "MIT",
+  "entry_point": "main.py",
+  "capabilities": [
+    "suite_execution",
+    "prompt_loading",
+    "result_scoring",
+    "hard_fail_detection",
+    "report_generation",
+    "schema_validation"
+  ],
+  "config_schema": {
+    "type": "object",
+    "properties": {
+      "default_suite": {
+        "type": "string",
+        "enum": ["smoke", "unit-smoke", "integration-smoke"],
+        "description": "Default evaluation suite",
+        "default": "smoke"
+      },
+      "pass_threshold": {
+        "type": "number",
+        "description": "Minimum score to pass (0.0-1.0)",
+        "default": 0.8
+      },
+      "max_steps_per_test": {
+        "type": "integer",
+        "description": "Maximum steps allowed per test",
+        "default": 50
+      },
+      "dry_run_by_default": {
+        "type": "boolean",
+        "description": "Default to dry-run mode",
+        "default": false
+      },
+      "output_formats": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "Output formats to generate",
+        "default": ["json", "markdown"]
+      }
+    },
+    "required": []
+  },
+  "dependencies": [
+    "artifact-packager"
+  ],
+  "mcp_servers": [],
+  "permissions": [
+    "fs:read",
+    "fs:write"
+  ]
+}

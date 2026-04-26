@@ -1,0 +1,54 @@
+{
+  "$schema": "https://kimi-moonshot.ai/schemas/mcp-server.schema.json",
+  "name": "database-mcp",
+  "version": "1.0.0",
+  "description": "Model Context Protocol server for database operations. Provides SQL query execution, schema introspection, and data export capabilities.",
+  "transport": {
+    "type": "stdio",
+    "command": "python",
+    "args": ["-m", "database_mcp.server"]
+  },
+  "capabilities": {
+    "tools": [
+      {
+        "name": "db_query",
+        "description": "Execute a SQL query",
+        "parameters": {
+          "query": { "type": "string", "description": "SQL query to execute" },
+          "database": { "type": "string", "description": "Database name", "optional": true }
+        }
+      },
+      {
+        "name": "db_schema",
+        "description": "Get schema information for a database or table",
+        "parameters": {
+          "database": { "type": "string", "description": "Database name" },
+          "table": { "type": "string", "description": "Table name (optional)", "optional": true }
+        }
+      },
+      {
+        "name": "db_list_tables",
+        "description": "List all tables in a database",
+        "parameters": {
+          "database": { "type": "string", "description": "Database name" }
+        }
+      },
+      {
+        "name": "db_export",
+        "description": "Export query results to a file",
+        "parameters": {
+          "query": { "type": "string", "description": "SQL query" },
+          "format": { "type": "string", "enum": ["csv", "json", "parquet"], "default": "csv" },
+          "output_path": { "type": "string", "description": "Output file path" }
+        }
+      }
+    ],
+    "resources": []
+  },
+  "config": {
+    "supported_databases": ["sqlite", "postgresql"],
+    "max_query_rows": 10000,
+    "query_timeout_seconds": 60,
+    "read_only_by_default": true
+  }
+}

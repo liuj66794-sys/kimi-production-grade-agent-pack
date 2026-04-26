@@ -1,0 +1,3 @@
+Research the current state of large language model evaluation benchmarks,
+comparing MMLU, HumanEval, and newer benchmarks like SWE-bench and LiveBench.
+Focus on what each benchmark measures and their limitations.

@@ -1,0 +1,22 @@
+{
+  "case_id": "id-001",
+  "current_step": "task-intake",
+  "completed_steps": [
+    "item-completed_steps-1"
+  ],
+  "blocked_steps": [
+    "item-blocked_steps-1"
+  ],
+  "step_status": {
+    "task-intake": "example task-intake",
+    "researcher": "example researcher",
+    "analyst": "example analyst",
+    "evidence-synthesis": "id-001",
+    "writer": "example writer",
+    "qa-reviewer": "example qa-reviewer",
+    "release": "example release"
+  },
+  "artifacts": {},
+  "timestamp": "2024-01-01T00:00:00Z",
+  "version": "1.5"
+}

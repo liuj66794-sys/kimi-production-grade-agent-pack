@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "checked_at": "2024-01-01T00:00:00Z",
+  "checks": [
+    {
+      "name": "example-name",
+      "pass": true
+    }
+  ],
+  "l1_integrity": true,
+  "l2_agent_enabled": {
+    "memory": true,
+    "slide_maker": true,
+    "spreadsheet": true,
+    "multimodal": true
+  },
+  "overall_status": "ready"
+}

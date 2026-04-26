@@ -1,0 +1,58 @@
+{
+  "report_id": "id-001",
+  "version": "1.4",
+  "timestamp": "2024-01-01T00:00:00Z",
+  "word_count": 1,
+  "section_count": 1,
+  "citation_count": 1,
+  "quality_dimensions": {
+    "structure_completeness": {
+      "score": 1.0,
+      "findings": [
+        "item-findings-1"
+      ],
+      "required_sections_present": 1,
+      "missing_sections": [
+        "item-missing_sections-1"
+      ]
+    },
+    "citation_quality": {
+      "score": 1.0,
+      "findings": [
+        "item-findings-1"
+      ],
+      "valid_citations": 1,
+      "invalid_citations": [
+        "item-invalid_citations-1"
+      ]
+    },
+    "uncertainty_annotation": {
+      "score": 1.0,
+      "findings": [
+        "item-findings-1"
+      ],
+      "annotations_found": 1
+    },
+    "format_consistency": {
+      "score": 1.0,
+      "findings": [
+        "item-findings-1"
+      ]
+    },
+    "content_richness": {
+      "score": 1.0,
+      "findings": [
+        "item-findings-1"
+      ]
+    },
+    "traceability": {
+      "score": 1.0,
+      "findings": [
+        "item-findings-1"
+      ],
+      "evidence_map_references": 1
+    }
+  },
+  "total_score": 1.0,
+  "passed_threshold": true
+}

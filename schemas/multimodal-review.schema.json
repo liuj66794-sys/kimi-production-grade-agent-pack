@@ -1,0 +1,169 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi.agent/schemas/multimodal-review/v2.4.0",
+  "title": "Multimodal Review Result",
+  "description": "Structured result from multimodal visual content review including findings, issues, and confidence annotations.",
+  "type": "object",
+  "required": ["media_file", "findings", "issues"],
+  "properties": {
+    "media_file": {
+      "type": "object",
+      "description": "Information about the analyzed media file",
+      "required": ["filename", "type"],
+      "properties": {
+        "filename": {
+          "type": "string",
+          "description": "Name of the media file"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["image", "video", "screenshot", "design_mockup", "chart"],
+          "description": "Classification of media type"
+        },
+        "format": {
+          "type": "string",
+          "enum": ["png", "jpg", "jpeg", "webp", "gif", "bmp", "tiff", "mp4", "mov", "avi"],
+          "description": "File format"
+        },
+        "dimensions": {
+          "type": "object",
+          "description": "Image/video dimensions",
+          "properties": {
+            "width": { "type": "integer", "minimum": 0 },
+            "height": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "description": "Observations and findings from visual analysis",
+      "items": {
+        "type": "object",
+        "required": ["category", "description", "confidence"],
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": ["ui_element", "layout", "typography", "color", "chart", "accessibility", "comparison", "other"],
+            "description": "Category of the finding"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed description of the finding"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": ["confirmed", "likely", "uncertain", "not_visible"],
+            "description": "Confidence level of this observation"
+          },
+          "element_type": {
+            "type": "string",
+            "description": "For UI elements: button, input, dropdown, modal, card, tab, nav, icon, text, chart_container, etc.",
+            "enum": ["button", "input", "dropdown", "modal", "card", "tab", "nav", "icon", "text", "heading", "image", "chart_container", "table", "form", "other"]
+          },
+          "location": {
+            "type": "string",
+            "description": "Approximate location in the image (e.g., 'top-left', 'center', 'bottom-right')"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Additional notes or caveats"
+          }
+        }
+      }
+    },
+    "issues": {
+      "type": "array",
+      "description": "Identified issues or problems",
+      "items": {
+        "type": "object",
+        "required": ["severity", "description"],
+        "properties": {
+          "severity": {
+            "type": "string",
+            "enum": ["critical", "high", "medium", "low"],
+            "description": "Issue severity level"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["layout", "alignment", "typography", "color", "contrast", "accessibility", "missing_element", "extra_element", "responsiveness", "other"],
+            "description": "Issue category"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed issue description"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": ["confirmed", "likely", "uncertain"],
+            "description": "Confidence that this issue is real"
+          },
+          "affected_elements": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "UI elements affected by this issue"
+          },
+          "recommendation": {
+            "type": "string",
+            "description": "Suggested fix or improvement"
+          }
+        }
+      }
+    },
+    "comparison_result": {
+      "type": "object",
+      "description": "Design-to-implementation comparison results (when both files provided)",
+      "properties": {
+        "fidelity_score": {
+          "type": "string",
+          "enum": ["high", "medium", "low"],
+          "description": "Overall fidelity of implementation to design"
+        },
+        "differences": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["description"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["color", "spacing", "font", "size", "missing", "extra", "alignment", "other"]
+              },
+              "description": { "type": "string" },
+              "severity": {
+                "type": "string",
+                "enum": ["critical", "high", "medium", "low"]
+              }
+            }
+          }
+        }
+      }
+    },
+    "confidence_summary": {
+      "type": "object",
+      "description": "Summary of confidence distribution across all observations",
+      "properties": {
+        "confirmed_count": { "type": "integer", "minimum": 0 },
+        "likely_count": { "type": "integer", "minimum": 0 },
+        "uncertain_count": { "type": "integer", "minimum": 0 },
+        "not_visible_count": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "overall_status": {
+      "type": "string",
+      "enum": ["completed", "partial_error", "degraded_quality", "failed"],
+      "description": "Overall analysis status"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "agent_version": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "$schema": "https://kimi-moonshot.ai/schemas/mcp-server.schema.json",
+  "name": "memory-mcp",
+  "version": "1.0.0",
+  "description": "Model Context Protocol server for memory management. Provides storage, retrieval, and search capabilities for agent memory (L2 capability).",
+  "transport": {
+    "type": "stdio",
+    "command": "python",
+    "args": ["-m", "memory_mcp.server"]
+  },
+  "capabilities": {
+    "tools": [
+      {
+        "name": "memory_store",
+        "description": "Store a memory entry",
+        "parameters": {
+          "key": { "type": "string", "description": "Unique key for the memory" },
+          "value": { "type": "string", "description": "Memory content" },
+          "tags": { "type": "array", "items": { "type": "string" }, "description": "Tags for categorization", "optional": true },
+          "ttl": { "type": "integer", "description": "Time-to-live in seconds", "optional": true }
+        }
+      },
+      {
+        "name": "memory_retrieve",
+        "description": "Retrieve a memory by key",
+        "parameters": {
+          "key": { "type": "string", "description": "Memory key" }
+        }
+      },
+      {
+        "name": "memory_search",
+        "description": "Search memories by content or tags",
+        "parameters": {
+          "query": { "type": "string", "description": "Search query" },
+          "tags": { "type": "array", "items": { "type": "string" }, "description": "Filter by tags", "optional": true },
+          "limit": { "type": "integer", "description": "Maximum results", "default": 10 }
+        }
+      },
+      {
+        "name": "memory_delete",
+        "description": "Delete a memory entry",
+        "parameters": {
+          "key": { "type": "string", "description": "Memory key to delete" }
+        }
+      },
+      {
+        "name": "memory_list",
+        "description": "List memory keys with optional filtering",
+        "parameters": {
+          "tags": { "type": "array", "items": { "type": "string" }, "description": "Filter by tags", "optional": true },
+          "limit": { "type": "integer", "description": "Maximum results", "default": 100 }
+        }
+      }
+    ],
+    "resources": []
+  },
+  "config": {
+    "storage_backend": "local_json",
+    "storage_path": "./.memory",
+    "max_entry_size_kb": 100,
+    "default_ttl_seconds": 86400,
+    "enable_semantic_search": false
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "title": "example title",
+  "subtitle": "example subtitle",
+  "narrative_arc": "context-problem-analysis-conclusion-recommendation",
+  "total_slides": 1,
+  "slides": [
+    {
+      "slide_id": "id-001",
+      "title": "example title",
+      "key_message": "example key_message"
+    }
+  ]
+}

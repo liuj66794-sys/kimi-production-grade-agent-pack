@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "hot_context": "example hot_context",
+  "protected_keys": [
+    "item-protected_keys-1"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "review_id": "id-001",
+  "task_id": "id-001",
+  "reviewer": "example reviewer",
+  "status": "pass",
+  "dimensions": [
+    {
+      "name": "completeness",
+      "score": 1,
+      "notes": "example notes",
+      "weight": 1.0
+    }
+  ],
+  "hard_fails": [
+    {
+      "rule": "example rule",
+      "description": "example description",
+      "severity": "critical",
+      "remediation": "example remediation"
+    }
+  ],
+  "overall_notes": "example overall_notes"
+}

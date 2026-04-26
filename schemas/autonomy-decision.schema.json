@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi.agent/schemas/autonomy-decision.schema.json",
+  "title": "AutonomyDecision",
+  "description": "Output from the Autonomy Gate action evaluation",
+  "type": "object",
+  "required": ["decision", "timestamp"],
+  "properties": {
+    "decision": {
+      "type": "string",
+      "enum": ["allow", "block", "require_approval"],
+      "description": "The gate decision for the requested action"
+    },
+    "action_name": {
+      "type": "string",
+      "description": "Name of the evaluated action"
+    },
+    "action_level": {
+      "type": "string",
+      "enum": ["a0", "a1", "a2", "a3", "a4", "a5"],
+      "description": "Autonomy level of the action"
+    },
+    "actor": {
+      "type": "string",
+      "description": "Identifier of the requesting actor"
+    },
+    "reason": {
+      "type": "string",
+      "description": "Human-readable explanation of the decision"
+    },
+    "approval_type": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "string",
+          "enum": ["hitl", "explicit_human"]
+        }
+      ],
+      "description": "Type of approval required, if any. Null for allow/block decisions."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of the decision"
+    }
+  },
+  "additionalProperties": false
+}

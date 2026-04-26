@@ -1,0 +1,14 @@
+version: "1.0.0"
+agent:
+  name: deep-research
+  description: Deep multi-source research with evidence synthesis
+  skills:
+    - deep-research
+    - swarm-orchestrator
+    - task-intake
+    - quality-review
+  subagents:
+    - researcher
+    - analyst
+    - writer
+    - qa-reviewer

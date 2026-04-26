@@ -1,0 +1,6 @@
+{
+  "approval_id": "id-001",
+  "action_name": "example-action_name",
+  "status": "pending",
+  "requested_at": "2024-01-01T00:00:00Z"
+}

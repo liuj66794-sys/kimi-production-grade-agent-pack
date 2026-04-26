@@ -1,0 +1,21 @@
+{
+  "deck_id": "id-001",
+  "title": "example title",
+  "source_report": "example source_report",
+  "generated_at": "2024-01-01T00:00:00Z",
+  "slides": [
+    {
+      "slide_id": "id-001",
+      "layout": "cover",
+      "title": "example title",
+      "content": [
+        {
+          "type": "text",
+          "text": "example text",
+          "source": "example source",
+          "confidence": "high"
+        }
+      ]
+    }
+  ]
+}

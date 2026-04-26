@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi.agent/schemas/context-pack.schema.json",
+  "title": "ContextPack",
+  "description": "Compiled context pack with hot/warm/cold layers",
+  "type": "object",
+  "required": ["version", "hot_context", "protected_keys"],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Schema version of the context pack"
+    },
+    "total_tokens": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Estimated total token count"
+    },
+    "hot_context": {
+      "type": "string",
+      "description": "Hot layer context (highest priority, protected keys must be included here)"
+    },
+    "warm_context": {
+      "type": "string",
+      "description": "Warm layer context (truncated before hot layer)"
+    },
+    "cold_references": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "References to cold layer data (not loaded directly)"
+    },
+    "protected_keys": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of keys that must not be truncated"
+    },
+    "truncation_log": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["layer", "reason", "timestamp"],
+        "properties": {
+          "layer": {
+            "type": "string",
+            "enum": ["hot", "warm", "total", "emergency"]
+          },
+          "reason": {
+            "type": "string"
+          },
+          "original_tokens": {
+            "type": "integer"
+          },
+          "max_tokens": {
+            "type": "integer"
+          },
+          "final_tokens": {
+            "type": "integer"
+          },
+          "items_removed": {
+            "type": "integer"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "description": "Log of all truncation operations performed"
+    }
+  },
+  "additionalProperties": false
+}

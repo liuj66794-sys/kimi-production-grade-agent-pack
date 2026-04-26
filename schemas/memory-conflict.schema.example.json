@@ -1,0 +1,7 @@
+{
+  "conflict_id": "id-001",
+  "entry_a": "example entry_a",
+  "entry_b": "example entry_b",
+  "conflict_type": "contradiction",
+  "status": "open"
+}

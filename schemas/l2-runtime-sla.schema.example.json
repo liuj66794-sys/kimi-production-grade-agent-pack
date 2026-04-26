@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "metrics": [
+    {
+      "name": "agent_activation_latency",
+      "target": 1.0,
+      "unit": "ms"
+    }
+  ],
+  "enforcement_rules": [
+    {
+      "rule_id": "id-001",
+      "name": "example-name",
+      "trigger_condition": "example trigger_condition",
+      "action": "example action"
+    }
+  ]
+}

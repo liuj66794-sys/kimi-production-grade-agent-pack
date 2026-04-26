@@ -1,0 +1,58 @@
+{
+  "$schema": "https://kimi-moonshot.ai/schemas/plugin.schema.json",
+  "name": "artifact-packager",
+  "version": "1.0.0",
+  "description": "Artifact packaging and distribution plugin. Collects, validates, and packages agent outputs into distributable formats.",
+  "author": "Kimi Team",
+  "license": "MIT",
+  "entry_point": "main.py",
+  "capabilities": [
+    "artifact_collection",
+    "manifest_generation",
+    "zip_packaging",
+    "artifact_validation",
+    "checksum_generation"
+  ],
+  "config_schema": {
+    "type": "object",
+    "properties": {
+      "output_format": {
+        "type": "string",
+        "enum": ["zip", "tar.gz", "dir"],
+        "description": "Default packaging format",
+        "default": "zip"
+      },
+      "include_manifest": {
+        "type": "boolean",
+        "description": "Generate artifact-manifest.json",
+        "default": true
+      },
+      "hash_algorithm": {
+        "type": "string",
+        "enum": ["sha256", "md5"],
+        "description": "Hash algorithm for artifact verification",
+        "default": "sha256"
+      },
+      "exclude_patterns": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "Glob patterns to exclude from packaging",
+        "default": ["*.tmp", "*.log", ".gitkeep"]
+      },
+      "max_package_size_mb": {
+        "type": "integer",
+        "description": "Maximum package size in MB",
+        "default": 100
+      }
+    },
+    "required": []
+  },
+  "dependencies": [],
+  "mcp_servers": [
+    "filesystem-mcp"
+  ],
+  "permissions": [
+    "fs:read",
+    "fs:write"
+  ]
+}

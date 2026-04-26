@@ -1,0 +1,203 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi.agent/schemas/visual-evidence/v2.4.0",
+  "title": "Visual Evidence Extraction",
+  "description": "Structured data extracted from charts, graphs, and data visualizations in images.",
+  "type": "object",
+  "required": ["media_file", "chart_type", "axes_labels", "extracted_data"],
+  "properties": {
+    "media_file": {
+      "type": "object",
+      "required": ["filename", "format"],
+      "properties": {
+        "filename": {
+          "type": "string",
+          "description": "Source image filename"
+        },
+        "format": {
+          "type": "string",
+          "enum": ["png", "jpg", "jpeg", "webp", "gif", "bmp", "tiff"]
+        },
+        "dimensions": {
+          "type": "object",
+          "properties": {
+            "width": { "type": "integer", "minimum": 0 },
+            "height": { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    },
+    "chart_type": {
+      "type": "string",
+      "enum": ["bar", "line", "pie", "donut", "scatter", "area", "histogram", "box_plot", "heatmap", "radar", "unknown"],
+      "description": "Identified chart type"
+    },
+    "chart_type_confidence": {
+      "type": "string",
+      "enum": ["confirmed", "likely", "uncertain"],
+      "description": "Confidence in chart type identification"
+    },
+    "axes_labels": {
+      "type": "object",
+      "description": "Axis labels and scale information",
+      "required": ["x", "y"],
+      "properties": {
+        "x": {
+          "type": "object",
+          "required": ["label"],
+          "properties": {
+            "label": {
+              "type": "string",
+              "description": "X-axis label text"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["categorical", "linear", "logarithmic", "datetime", "unknown"]
+            },
+            "unit": {
+              "type": "string",
+              "description": "Unit of measurement if applicable"
+            },
+            "categories": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Category labels for categorical axes"
+            },
+            "min": {
+              "description": "Minimum axis value (for numeric scales)"
+            },
+            "max": {
+              "description": "Maximum axis value (for numeric scales)"
+            }
+          }
+        },
+        "y": {
+          "type": "object",
+          "required": ["label"],
+          "properties": {
+            "label": {
+              "type": "string",
+              "description": "Y-axis label text"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["linear", "logarithmic", "percentage", "unknown"]
+            },
+            "unit": {
+              "type": "string",
+              "description": "Unit of measurement"
+            },
+            "min": {
+              "description": "Minimum axis value"
+            },
+            "max": {
+              "description": "Maximum axis value"
+            }
+          }
+        }
+      }
+    },
+    "legend": {
+      "type": "array",
+      "description": "Legend entries mapping colors/patterns to series",
+      "items": {
+        "type": "object",
+        "required": ["series_name"],
+        "properties": {
+          "series_name": { "type": "string" },
+          "color": { "type": "string", "description": "Approximate color hex code" },
+          "pattern": { "type": "string", "description": "Pattern description if applicable" }
+        }
+      }
+    },
+    "series": {
+      "type": "array",
+      "description": "Data series extracted from the chart",
+      "items": {
+        "type": "object",
+        "required": ["name", "data_points"],
+        "properties": {
+          "name": { "type": "string", "description": "Series name" },
+          "color": { "type": "string" },
+          "data_points": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["confidence"],
+              "properties": {
+                "x": { "description": "X-axis value" },
+                "y": {
+                  "type": "number",
+                  "description": "Y-axis value (estimated from visual position)"
+                },
+                "confidence": {
+                  "type": "string",
+                  "enum": ["high", "medium", "low"],
+                  "description": "Confidence in this data point estimate"
+                },
+                "label": {
+                  "type": "string",
+                  "description": "Data label if visible on chart"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "extracted_data": {
+      "type": "array",
+      "description": "Flat list of all extracted data items",
+      "items": {
+        "type": "object",
+        "required": ["type", "value", "confidence"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["numeric", "categorical", "percentage", "date", "text", "label"],
+            "description": "Type of extracted value"
+          },
+          "value": {
+            "description": "Extracted value (type varies by data type)"
+          },
+          "confidence": {
+            "type": "string",
+            "enum": ["high", "medium", "low"],
+            "description": "Extraction confidence"
+          },
+          "region": {
+            "type": "string",
+            "description": "Approximate region in image (e.g., 'top-bar', 'line-point-3')"
+          },
+          "context": {
+            "type": "string",
+            "description": "Contextual description of what this value represents"
+          },
+          "series_name": {
+            "type": "string",
+            "description": "Series this data point belongs to"
+          },
+          "unit": {
+            "type": "string",
+            "description": "Unit of measurement"
+          }
+        }
+      }
+    },
+    "chart_data_csv": {
+      "type": "string",
+      "description": "Path to generated CSV file with extracted tabular data"
+    },
+    "extraction_notes": {
+      "type": "string",
+      "description": "Notes about extraction methodology, limitations, or caveats"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "agent_version": {
+      "type": "string"
+    }
+  }
+}

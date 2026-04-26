@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi-agent-pack/schemas/l3-runner-job.schema.json",
+  "title": "L3 Runner Job",
+  "description": "Schema for a runner job in the Kimi Agent Pack v3.x L3 layer. Represents an evaluation, regression test, release check, or script execution task.",
+  "type": "object",
+  "required": ["id", "job_type", "status"],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "Unique job identifier"
+    },
+    "job_type": {
+      "type": "string",
+      "enum": ["eval", "regression", "release_check", "script"],
+      "description": "Type of the job"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "running", "completed", "failed", "timeout"],
+      "description": "Current status of the job"
+    },
+    "params": {
+      "type": "object",
+      "description": "Job-specific parameters",
+      "additionalProperties": true
+    },
+    "result": {
+      "type": "object",
+      "description": "Job execution result",
+      "additionalProperties": true
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the job was created"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the job started execution"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the job completed"
+    },
+    "error_message": {
+      "type": ["string", "null"],
+      "description": "Error message if the job failed"
+    },
+    "pid": {
+      "type": ["integer", "null"],
+      "description": "Process ID of the running job (null if not running)"
+    }
+  },
+  "additionalProperties": false
+}

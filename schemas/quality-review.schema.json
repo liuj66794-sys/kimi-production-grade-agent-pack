@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi-moonshot.ai/schemas/quality-review.schema.json",
+  "title": "Quality Review",
+  "description": "Schema for quality review results of agent outputs",
+  "type": "object",
+  "required": [
+    "review_id",
+    "task_id",
+    "reviewer",
+    "status",
+    "dimensions",
+    "hard_fails",
+    "overall_notes"
+  ],
+  "properties": {
+    "review_id": {
+      "type": "string",
+      "description": "Unique identifier for this review"
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Identifier of the task being reviewed"
+    },
+    "reviewer": {
+      "type": "string",
+      "description": "Name or identifier of the reviewer (agent or human)"
+    },
+    "status": {
+      "type": "string",
+      "description": "Overall review status",
+      "enum": ["pass", "fail", "pass_with_notes"]
+    },
+    "dimensions": {
+      "type": "array",
+      "description": "Quality dimensions evaluated",
+      "items": {
+        "type": "object",
+        "required": ["name", "score", "notes"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": [
+              "completeness",
+              "accuracy",
+              "source_quality",
+              "format_compliance",
+              "reasoning_clarity",
+              "constraint_adherence",
+              "deliverable_quality",
+              "test_coverage",
+              "documentation",
+              "edge_case_handling"
+            ],
+            "description": "Name of the quality dimension"
+          },
+          "score": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10,
+            "description": "Score for this dimension (0-10)"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Notes and observations for this dimension"
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Weight of this dimension in the overall score"
+          }
+        }
+      }
+    },
+    "hard_fails": {
+      "type": "array",
+      "description": "List of hard failures identified during review",
+      "items": {
+        "type": "object",
+        "required": ["rule", "description"],
+        "properties": {
+          "rule": {
+            "type": "string",
+            "description": "The hard fail rule that was violated"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the violation"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["critical", "major", "minor"]
+          },
+          "remediation": {
+            "type": "string",
+            "description": "Suggested remediation action"
+          }
+        }
+      }
+    },
+    "overall_notes": {
+      "type": "string",
+      "description": "Overall review notes and summary"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "reviewed_at": { "type": "string", "format": "date-time" },
+        "review_duration_seconds": { "type": "integer" },
+        "automated": { "type": "boolean" }
+      }
+    }
+  },
+  "additionalProperties": false
+}

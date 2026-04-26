@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi.agent/schemas/hitl-approval.schema.json",
+  "title": "HITLApproval",
+  "description": "A Human-in-the-Loop approval request record",
+  "type": "object",
+  "required": ["approval_id", "action_name", "status", "requested_at"],
+  "properties": {
+    "approval_id": {
+      "type": "string",
+      "description": "Unique identifier for this approval request"
+    },
+    "action_name": {
+      "type": "string",
+      "description": "Name of the action requiring approval"
+    },
+    "action_level": {
+      "type": "string",
+      "enum": ["a0", "a1", "a2", "a3", "a4", "a5"],
+      "description": "Autonomy level of the action"
+    },
+    "actor": {
+      "type": "string",
+      "description": "Identifier of the requesting actor"
+    },
+    "request_details": {
+      "type": "string",
+      "description": "Detailed description of the requested action"
+    },
+    "risk_assessment": {
+      "type": "string",
+      "description": "Risk assessment of the action"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "approved", "rejected", "deferred", "timeout"],
+      "description": "Current status of the approval"
+    },
+    "requested_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the approval was requested"
+    },
+    "responded_at": {
+      "oneOf": [
+        { "type": "null" },
+        { "type": "string", "format": "date-time" }
+      ],
+      "description": "When the approval was responded to, or null if pending"
+    },
+    "responded_by": {
+      "oneOf": [
+        { "type": "null" },
+        { "type": "string" }
+      ],
+      "description": "Identifier of the responder, or null if pending"
+    },
+    "auto_accept_eligible": {
+      "type": "boolean",
+      "description": "Whether this approval can be auto-accepted on timeout. Only true for A1/A2 read-only actions. A3+ must always be false."
+    },
+    "timeout_at": {
+      "oneOf": [
+        { "type": "null" },
+        { "type": "string", "format": "date-time" }
+      ],
+      "description": "When the approval request times out"
+    }
+  },
+  "additionalProperties": false
+}

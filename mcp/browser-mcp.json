@@ -1,0 +1,74 @@
+{
+  "$schema": "https://kimi-moonshot.ai/schemas/mcp-server.schema.json",
+  "name": "browser-mcp",
+  "version": "1.0.0",
+  "description": "Model Context Protocol server for browser automation. Provides web browsing, page capture, and content extraction capabilities.",
+  "transport": {
+    "type": "stdio",
+    "command": "python",
+    "args": ["-m", "browser_mcp.server"]
+  },
+  "capabilities": {
+    "tools": [
+      {
+        "name": "browser_navigate",
+        "description": "Navigate to a URL",
+        "parameters": {
+          "url": { "type": "string", "description": "URL to navigate to" },
+          "wait_for": { "type": "string", "description": "Element to wait for", "optional": true }
+        }
+      },
+      {
+        "name": "browser_screenshot",
+        "description": "Capture a screenshot of the current page",
+        "parameters": {
+          "full_page": { "type": "boolean", "default": false },
+          "selector": { "type": "string", "optional": true }
+        }
+      },
+      {
+        "name": "browser_extract_text",
+        "description": "Extract text content from the current page",
+        "parameters": {
+          "selector": { "type": "string", "optional": true }
+        }
+      },
+      {
+        "name": "browser_click",
+        "description": "Click an element on the page",
+        "parameters": {
+          "selector": { "type": "string", "description": "CSS selector of the element" }
+        }
+      },
+      {
+        "name": "browser_scroll",
+        "description": "Scroll the page",
+        "parameters": {
+          "direction": { "type": "string", "enum": ["up", "down"] },
+          "amount": { "type": "integer", "default": 500 }
+        }
+      }
+    ],
+    "resources": [
+      {
+        "name": "page_content",
+        "description": "Current page HTML content",
+        "mime_type": "text/html"
+      },
+      {
+        "name": "page_text",
+        "description": "Current page text content",
+        "mime_type": "text/plain"
+      }
+    ]
+  },
+  "config": {
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    },
+    "user_agent": "KimiAgent-Browser/1.0",
+    "timeout": 30000,
+    "headless": true
+  }
+}

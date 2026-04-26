@@ -1,0 +1,175 @@
+# Task Suite Definition for Kimi Production-Grade Agent Pack v1.0
+# ================================================================
+#
+# This file defines the evaluation test suites used to validate
+# the agent pack's capabilities across different levels.
+
+version: "1.0.0"
+description: "Evaluation test suites for the agent pack"
+
+# ------------------------------------------------------------------
+# Smoke Tests
+# ------------------------------------------------------------------
+smoke_tests:
+  name: "Smoke Tests"
+  description: >
+    Quick sanity checks that verify core agent functionality.
+    Each test should complete in under 2 minutes.
+  tests:
+    - id: "SM-01"
+      name: "Fuzzy requirement to task brief"
+      description: "Agent converts a vague user request into a structured task-brief"
+      expected_schema: "task-brief.schema.json"
+      max_steps: 15
+      critical: true
+
+    - id: "SM-02"
+      name: "Single-topic deep research"
+      description: "Agent conducts deep research on a single topic and produces an evidence map"
+      expected_schema: "evidence-map.schema.json"
+      max_steps: 20
+      critical: true
+
+    - id: "SM-03"
+      name: "Multi-source evidence synthesis"
+      description: "Agent synthesizes evidence from multiple sources and resolves conflicts"
+      expected_schema: "evidence-map.schema.json"
+      max_steps: 20
+      critical: true
+
+    - id: "SM-04"
+      name: "Code fix with validation"
+      description: "Agent fixes a bug in provided code and validates the fix"
+      expected_artifacts: ["fixed_code.py", "test_results"]
+      max_steps: 20
+      critical: true
+
+    - id: "SM-05"
+      name: "PPT outline generation"
+      description: "Agent generates a structured PPT outline with page-level key messages"
+      expected_artifacts: ["ppt_outline.json"]
+      max_steps: 15
+      critical: true
+
+    - id: "SM-06"
+      name: "Table model generation"
+      description: "Agent generates a data table with full traceability to sources"
+      expected_schema: "evidence-map.schema.json"
+      max_steps: 15
+      critical: false
+
+    - id: "SM-07"
+      name: "Quality review execution"
+      description: "Agent performs a quality review of a given output"
+      expected_schema: "quality-review.schema.json"
+      max_steps: 15
+      critical: true
+
+    - id: "SM-08"
+      name: "Sub-agent context snapshot check"
+      description: "Verify sub-agent output includes complete context_snapshot"
+      expected_schema: "subagent-result.schema.json"
+      max_steps: 10
+      critical: true
+
+# ------------------------------------------------------------------
+# Unit Smoke Tests
+# ------------------------------------------------------------------
+unit_smoke_tests:
+  name: "Unit Smoke Tests"
+  description: >
+    Tests for individual skills and capabilities in isolation.
+    Each test targets a single skill or function.
+  tests:
+    - id: "US-01"
+      name: "Schema validation skill"
+      description: "Validate JSON data against a schema"
+      skill: "validate_schema"
+      max_steps: 5
+
+    - id: "US-02"
+      name: "Web search skill"
+      description: "Execute a web search and return structured results"
+      skill: "web_search"
+      max_steps: 10
+
+    - id: "US-03"
+      name: "Code execution skill"
+      description: "Execute Python code and return output"
+      skill: "code_execution"
+      max_steps: 10
+
+    - id: "US-04"
+      name: "File I/O skill"
+      description: "Read and write files in the workspace"
+      skill: "file_io"
+      max_steps: 5
+
+    - id: "US-05"
+      name: "Evidence extraction skill"
+      description: "Extract claims and evidence from a text source"
+      skill: "evidence_extraction"
+      max_steps: 10
+
+    - id: "US-06"
+      name: "Quality review skill"
+      description: "Review output against quality dimensions"
+      skill: "quality_review"
+      max_steps: 10
+
+    - id: "US-07"
+      name: "Conflict detection skill"
+      description: "Detect conflicts between claims"
+      skill: "conflict_detection"
+      max_steps: 10
+
+    - id: "US-08"
+      name: "Artifact packaging skill"
+      description: "Package artifacts into a distributable format"
+      skill: "artifact_packaging"
+      max_steps: 5
+
+# ------------------------------------------------------------------
+# Integration Smoke Tests
+# ------------------------------------------------------------------
+integration_smoke_tests:
+  name: "Integration Smoke Tests"
+  description: >
+    End-to-end tests that exercise multiple skills in coordination.
+    These tests verify the agent can orchestrate complex workflows.
+  tests:
+    - id: "IS-01"
+      name: "Research-to-report pipeline"
+      description: >
+        Full pipeline: research a topic, synthesize evidence,
+        generate a report, and perform quality review
+      skills: ["web_search", "evidence_extraction", "conflict_detection", "quality_review"]
+      max_steps: 40
+      critical: true
+
+    - id: "IS-02"
+      name: "Code fix and validate pipeline"
+      description: >
+        Full pipeline: identify a bug, fix the code,
+        write tests, and validate the fix
+      skills: ["code_execution", "file_io", "quality_review"]
+      max_steps: 30
+      critical: true
+
+    - id: "IS-03"
+      name: "Multi-agent delegation workflow"
+      description: >
+        Coordinator delegates sub-tasks to sub-agents,
+        collects results, and produces final output
+      skills: ["subagent_orchestration", "evidence_synthesis", "quality_review"]
+      max_steps: 50
+      critical: true
+
+    - id: "IS-04"
+      name: "End-to-end content production"
+      description: >
+        Produce a complete deliverable: research, draft, review,
+        and package with full traceability
+      skills: ["web_search", "file_io", "quality_review", "artifact_packaging"]
+      max_steps: 50
+      critical: false

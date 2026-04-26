@@ -1,0 +1,62 @@
+{
+  "$schema": "https://kimi-moonshot.ai/schemas/plugin.schema.json",
+  "name": "web-capture",
+  "version": "1.0.0",
+  "description": "Web page capture and content extraction plugin. Captures web pages as screenshots, PDFs, or structured text for agent consumption.",
+  "author": "Kimi Team",
+  "license": "MIT",
+  "entry_point": "main.py",
+  "capabilities": [
+    "web_page_capture",
+    "screenshot_generation",
+    "text_extraction",
+    "pdf_generation",
+    "element_detection"
+  ],
+  "config_schema": {
+    "type": "object",
+    "properties": {
+      "capture_timeout": {
+        "type": "integer",
+        "description": "Maximum time to wait for page capture in seconds",
+        "default": 30
+      },
+      "viewport_width": {
+        "type": "integer",
+        "description": "Viewport width for capture",
+        "default": 1920
+      },
+      "viewport_height": {
+        "type": "integer",
+        "description": "Viewport height for capture",
+        "default": 1080
+      },
+      "full_page": {
+        "type": "boolean",
+        "description": "Capture full page or viewport only",
+        "default": true
+      },
+      "output_format": {
+        "type": "string",
+        "enum": ["png", "jpg", "pdf", "text", "html"],
+        "description": "Default output format",
+        "default": "png"
+      },
+      "user_agent": {
+        "type": "string",
+        "description": "User agent string for requests",
+        "default": "KimiAgent-WebCapture/1.0"
+      }
+    },
+    "required": []
+  },
+  "dependencies": [],
+  "mcp_servers": [
+    "browser-mcp"
+  ],
+  "permissions": [
+    "network:fetch",
+    "fs:read",
+    "fs:write"
+  ]
+}

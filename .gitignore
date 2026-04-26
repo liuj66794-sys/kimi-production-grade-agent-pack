@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+
+# Database
+data/dashboard.db
+*.db
+*.sqlite
+*.sqlite3
+
+# Runtime / logs
+runtime/
+logs/
+*.log
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Artifacts (generated)
+artifacts/*
+!artifacts/.gitkeep
+
+# Eval results
+evals/results/*
+!evals/results/.gitkeep
+
+# Memory candidates
+memory/candidates/*
+!memory/candidates/.gitkeep
+memory/approved/*
+!memory/approved/.gitkeep

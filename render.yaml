@@ -1,0 +1,29 @@
+# Render Blueprint - Infrastructure as Code for Kimi Agent Pack
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  # FastAPI Backend
+  - type: web
+    name: kimi-agent-pack-api
+    runtime: docker
+    repo: https://github.com/<your-username>/kimi-agent-pack
+    branch: main
+    dockerfilePath: ./apps/backend/Dockerfile
+    dockerContext: .
+    envVars:
+      - key: DATABASE_URL
+        sync: false  # Set manually in Render dashboard after Supabase setup
+      - key: KIMI_CORS_ORIGINS
+        sync: false  # Set to your Vercel frontend domain
+      - key: KIMI_MAX_CONCURRENT_JOBS
+        value: "3"
+      - key: KIMI_SCRIPT_TIMEOUT
+        value: "300"
+      - key: KIMI_JOB_ORPHAN_THRESHOLD
+        value: "600"
+      - key: PYTHONUNBUFFERED
+        value: "1"
+    healthCheckPath: /health
+    plan: free  # Upgrade to "starter" for production
+
+# Note: Frontend is deployed separately to Vercel (see DEPLOY.md)

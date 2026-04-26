@@ -1,0 +1,30 @@
+{
+  "media_file": {
+    "filename": "example-filename",
+    "format": "png",
+    "dimensions": {
+      "width": 1,
+      "height": 1
+    }
+  },
+  "chart_type": "bar",
+  "axes_labels": {
+    "x": {
+      "label": "example label"
+    },
+    "y": {
+      "label": "example label",
+      "type": "linear",
+      "unit": "example unit",
+      "min": "example min",
+      "max": "example max"
+    }
+  },
+  "extracted_data": [
+    {
+      "type": "numeric",
+      "value": "example value",
+      "confidence": "high"
+    }
+  ]
+}

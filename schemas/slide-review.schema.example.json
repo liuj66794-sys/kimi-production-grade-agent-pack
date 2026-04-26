@@ -1,0 +1,21 @@
+{
+  "review_id": "id-001",
+  "slide_deck_id": "id-001",
+  "status": "pass",
+  "dimensions": [
+    {
+      "name": "narrative_coherence",
+      "score": 1,
+      "notes": "example notes"
+    }
+  ],
+  "hard_fails": [
+    {
+      "type": "content_detached",
+      "description": "example description",
+      "location": "example location",
+      "severity": "critical"
+    }
+  ],
+  "reviewed_at": "2024-01-01T00:00:00Z"
+}

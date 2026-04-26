@@ -1,0 +1,30 @@
+{
+  "claims": [
+    {
+      "claim_id": "id-001",
+      "claim_text": "example claim_text",
+      "evidence_refs": [
+        "item-evidence_refs-1"
+      ],
+      "confidence": "high",
+      "status": "verified"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "id-001",
+      "source_type": "academic_paper",
+      "reliability": "high"
+    }
+  ],
+  "conflicts": [
+    {
+      "claim_a": "example claim_a",
+      "claim_b": "example claim_b",
+      "resolution": "a_favored",
+      "resolution_notes": "example resolution_notes",
+      "detected_by": "example detected_by"
+    }
+  ],
+  "metadata": {}
+}

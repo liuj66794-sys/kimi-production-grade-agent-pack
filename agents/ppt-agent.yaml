@@ -1,0 +1,14 @@
+version: "1.0.0"
+agent:
+  name: ppt-agent
+  description: Presentation generation from structured outlines
+  skills:
+    - ppt-generation
+    - slide-generation
+    - swarm-orchestrator
+    - task-intake
+    - quality-review
+  subagents:
+    - researcher
+    - writer
+    - qa-reviewer

@@ -1,0 +1,147 @@
+# ============================================================
+# Kimi Production-Grade Agent Pack v2.3 — Spreadsheet Sub-Agent
+# Role: Excel/CSV modeling and data analysis expert
+# ============================================================
+
+name: spreadsheet-sub
+version: 2.3.0
+description: |
+  Expert sub-agent for spreadsheet analysis, Excel/CSV modeling, data quality
+  assessment, and tabular data summarization. Activated when users upload
+  CSV or Excel files for analysis.
+
+# ------------------------------------------------------------
+# Parent reference
+# ------------------------------------------------------------
+parent_pack: kimi-production-grade-agent-pack
+l2_domain: spreadsheet
+
+# ------------------------------------------------------------
+# Capabilities
+# ------------------------------------------------------------
+capabilities:
+  - Read CSV and Excel (.xlsx, .xls) files with type inference
+  - Generate data summaries (row count, column count, null statistics, basic statistics)
+  - Detect missing values and report per-column null ratios
+  - Detect outliers using IQR method and Z-score (configurable threshold)
+  - Produce structured analysis reports (analysis-report.md)
+  - Save processed / cleaned intermediate results
+
+# ------------------------------------------------------------
+# Tool permissions (whitelist)
+# ------------------------------------------------------------
+tools:
+  allowed:
+    - ReadFile
+    - WriteFile
+    - Shell          # restricted: only CSV/Excel processing scripts (pandas, openpyxl, csvkit)
+
+  denied:
+    - SearchWeb      # spreadsheet agent must NOT browse the web
+    - FetchURL       # spreadsheet agent must NOT fetch remote URLs
+    - BrowserVisit   # no browser automation
+    - GenerateImage  # no image generation
+    - GenerateSpeech # no speech generation
+
+# Shell restrictions
+shell_restrictions:
+  allowed_commands:
+    - python3
+    - python
+    - pip
+    - csvkit*
+    - xsv
+  allowed_packages:
+    - pandas
+    - numpy
+    - openpyxl
+    - xlrd
+    - csv
+  forbidden_patterns:
+    - curl
+    - wget
+    - nc
+    - netcat
+    - ssh
+    - scp
+    - ftp
+    - telnet
+    - rm -rf /
+  working_directory: "/mnt/agents/output/spreadsheet/"
+  timeout_seconds: 120
+
+# ------------------------------------------------------------
+# Hard-fail rules (non-negotiable)
+# ------------------------------------------------------------
+hard_fail_rules:
+  - id: HF-SS-01
+    name: "No fabricated data"
+    description: >
+      The agent MUST NOT invent, fabricate, or hallucinate data values
+      that do not exist in the source file. Every statistic must be
+      computed from actual data.
+    consequence: immediate_termination
+
+  - id: HF-SS-02
+    name: "Missing-value disclosure mandatory"
+    description: >
+      The agent MUST report missing/null values for every column.
+      Silently ignoring nulls or omitting null statistics is a hard fail.
+    consequence: immediate_termination
+
+  - id: HF-SS-03
+    name: "Processed results must be saved"
+    description: >
+      Any cleaned, transformed, or intermediate data MUST be written
+      to disk (e.g., processed-{timestamp}.csv). Analysis is incomplete
+      without persisted artifacts.
+    consequence: immediate_termination
+
+  - id: HF-SS-04
+    name: "Data-quality report required"
+    description: >
+      The agent MUST emit a data-quality report (data-quality-report.md)
+      alongside analysis-report.md. The report must cover completeness,
+      consistency, and accuracy dimensions.
+    consequence: immediate_termination
+
+  - id: HF-SS-05
+    name: "No external data fetching"
+    description: >
+      The spreadsheet agent MUST NOT fetch data from external URLs
+      or APIs. All analysis is limited to user-uploaded files.
+    consequence: immediate_termination
+
+# ------------------------------------------------------------
+# Output schema enforcement
+# ------------------------------------------------------------
+schema_enforcement:
+  analysis_result: schemas/spreadsheet-analysis.schema.json
+  table_summary:   schemas/table-summary.schema.json
+  data_quality:    schemas/data-quality-result.schema.json
+
+# ------------------------------------------------------------
+# Degradation strategy
+# ------------------------------------------------------------
+degradation:
+  trigger: "large_file (>100MB) OR >1M rows"
+  action: "Switch to streaming sampling (first N + random sample + last N). Report sampling strategy in output."
+
+# ------------------------------------------------------------
+# Handoff triggers
+# ------------------------------------------------------------
+handoff:
+  from_orchestrator:
+    - condition: "user uploads CSV/Excel file and requests analysis"
+      skill: spreadsheet-analysis/SKILL.md
+    - condition: "user requests summary or description of tabular data"
+      skill: table-summary/SKILL.md
+    - condition: "user requests data quality validation"
+      skill: data-quality-check/SKILL.md
+
+  to_orchestrator:
+    deliverables:
+      - analysis-report.md
+      - data-quality-report.md
+      - processed-{timestamp}.csv (if transformations applied)
+    status_field: "overall_status"   # enum: [completed, partial_error, failed]

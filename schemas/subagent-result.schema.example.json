@@ -1,0 +1,61 @@
+{
+  "task_id": "id-001",
+  "agent": "example agent",
+  "status": "completed",
+  "conclusion": [
+    {
+      "statement": "example statement",
+      "confidence": "high",
+      "priority": "critical"
+    }
+  ],
+  "evidence": [
+    {
+      "claim": "example claim",
+      "source": "example source",
+      "source_type": "web_page",
+      "confidence": "high",
+      "caveat": "example caveat"
+    }
+  ],
+  "artifacts": [
+    {
+      "type": "file",
+      "path": "example path",
+      "description": "example description"
+    }
+  ],
+  "context_snapshot": {
+    "input_files": [
+      "item-input_files-1"
+    ],
+    "search_queries": [
+      "item-search_queries-1"
+    ],
+    "tools_used": [
+      "item-tools_used-1"
+    ]
+  },
+  "intermediate_artifacts": [
+    {
+      "path": "example path",
+      "description": "example description",
+      "kept": true
+    }
+  ],
+  "blockers": [
+    {
+      "description": "example description",
+      "severity": "blocking",
+      "resolution": "example resolution"
+    }
+  ],
+  "assumptions": [
+    {
+      "assumption": "example assumption",
+      "rationale": "example rationale",
+      "risk": "low"
+    }
+  ],
+  "next_step": "example next_step"
+}

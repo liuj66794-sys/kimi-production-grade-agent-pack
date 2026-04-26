@@ -1,0 +1,22 @@
+{
+  "filename": "example-filename",
+  "overall_score": 1.0,
+  "overall_rating": "Excellent",
+  "dimensions": [
+    {
+      "name": "Completeness",
+      "score": 1.0,
+      "rating": "Excellent",
+      "issues": [
+        {
+          "description": "example description",
+          "severity": "info",
+          "affected_columns": [
+            "item-affected_columns-1"
+          ],
+          "recommendation": "example recommendation"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "review_id": "repeatability-review-2026-04-25T23:26:10.691268",
+  "timestamp": "2026-04-25T23:26:10.691280",
+  "runs_directory": "runs",
+  "total_runs_discovered": 0,
+  "run_paths": [],
+  "checks": {},
+  "summary": {
+    "all_checks_pass": false,
+    "blocking_issues": [
+      "Insufficient runs for repeatability check (need >= 2)"
+    ]
+  }
+}

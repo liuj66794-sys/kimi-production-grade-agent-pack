@@ -1,0 +1,11 @@
+{
+  "case_id": "id-001",
+  "version": "1.0.0",
+  "generated_at": "2024-01-01T00:00:00Z",
+  "timeline_mode": "summary",
+  "total_steps": 1,
+  "completed_steps": 1,
+  "steps": [
+    "item-steps-1"
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi-agent-pack/schemas/task-timeline.schema.json",
+  "title": "Task Timeline",
+  "description": "Schema for task execution timeline output",
+  "type": "object",
+  "required": [
+    "case_id",
+    "version",
+    "generated_at",
+    "timeline_mode",
+    "total_steps",
+    "completed_steps",
+    "steps"
+  ],
+  "properties": {
+    "case_id": {
+      "type": "string",
+      "description": "Unique case identifier for task isolation"
+    },
+    "version": {
+      "type": "string",
+      "description": "Schema version"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 timestamp when timeline was generated"
+    },
+    "timeline_mode": {
+      "type": "string",
+      "enum": ["summary", "full"],
+      "description": "Timeline detail level: summary or full"
+    },
+    "total_steps": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total number of steps in the timeline"
+    },
+    "completed_steps": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of completed steps"
+    },
+    "pending_steps": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of pending steps"
+    },
+    "blocked_steps": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of blocked steps"
+    },
+    "total_estimated_duration_minutes": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total estimated duration in minutes"
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/timeline_step"
+      }
+    }
+  },
+  "definitions": {
+    "timeline_step": {
+      "type": "object",
+      "required": [
+        "step_id",
+        "step_name",
+        "display_order",
+        "status"
+      ],
+      "properties": {
+        "step_id": {
+          "type": "string",
+          "description": "Unique step identifier"
+        },
+        "step_name": {
+          "type": "string",
+          "description": "Human-readable step name"
+        },
+        "display_order": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Display order in the timeline"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["not_started", "in_progress", "completed", "blocked", "failed", "skipped"],
+          "description": "Current step status"
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the step started"
+        },
+        "completed_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the step completed"
+        },
+        "estimated_duration_minutes": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Estimated duration in minutes"
+        },
+        "actual_duration_minutes": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Actual duration in minutes (full mode)"
+        },
+        "depends_on": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Step IDs this step depends on"
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Artifact paths produced by this step"
+        },
+        "prompt_template": {
+          "type": "string",
+          "description": "Path to the prompt template for this step (full mode)"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Additional notes about this step"
+        }
+      }
+    }
+  }
+}

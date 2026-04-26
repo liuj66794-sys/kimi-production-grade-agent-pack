@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi.agent.pack/schemas/slide-content.schema.json",
+  "title": "Slide Content",
+  "description": "PPT完整内容定义，包含每页slide的详细内容、来源标注和讲解要点",
+  "type": "object",
+  "required": ["deck_id", "title", "source_report", "slides"],
+  "properties": {
+    "deck_id": {
+      "type": "string",
+      "description": "slide deck唯一标识符",
+      "pattern": "^deck-[0-9]{8}-[a-f0-9]{4,}$"
+    },
+    "title": {
+      "type": "string",
+      "description": "PPT整体标题"
+    },
+    "source_report": {
+      "type": "string",
+      "description": "内容来源的final-report文件路径"
+    },
+    "generated_at": {
+      "type": "string",
+      "description": "生成时间，ISO 8601格式",
+      "format": "date-time"
+    },
+    "slides": {
+      "type": "array",
+      "description": "slide内容数组",
+      "minItems": 1,
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "required": ["slide_id", "layout", "title", "content"],
+        "properties": {
+          "slide_id": {
+            "type": "string",
+            "description": "slide唯一标识符",
+            "pattern": "^slide-[0-9]{2}$"
+          },
+          "layout": {
+            "type": "string",
+            "description": "页面布局类型",
+            "enum": ["cover", "title", "content", "two-column", "comparison", "data", "chart", "summary", "closing"]
+          },
+          "title": {
+            "type": "string",
+            "description": "slide页面标题"
+          },
+          "content": {
+            "type": "array",
+            "description": "内容元素数组",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["type", "text"],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "内容元素类型",
+                  "enum": ["text", "bullet", "number", "quote", "risk", "highlight", "chart_placeholder", "image_placeholder"]
+                },
+                "text": {
+                  "type": "string",
+                  "description": "内容文本"
+                },
+                "source": {
+                  "type": "string",
+                  "description": "数据来源（在final-report中的位置），text类型可为null"
+                },
+                "confidence": {
+                  "type": "string",
+                  "description": "该条内容的confidence等级",
+                  "enum": ["high", "medium", "low"]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "speaker_notes": {
+            "type": "string",
+            "description": "讲解要点，供演讲者参考"
+          },
+          "transition": {
+            "type": "string",
+            "description": "与下一页的过渡语"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

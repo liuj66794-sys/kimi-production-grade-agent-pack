@@ -1,0 +1,213 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi-agent-pack/schemas/run-metadata.schema.json",
+  "title": "Run Metadata",
+  "description": "Records the actual execution environment of the eval-runner and the runner fallback chain. Overrides the v1.0 skeleton with complete metadata fields.",
+  "type": "object",
+  "required": [
+    "runner_requested",
+    "runner_actual",
+    "runner_fallback_chain",
+    "sdk_available",
+    "cli_available",
+    "sdk_version",
+    "cli_version",
+    "model_name",
+    "pack_version",
+    "start_time",
+    "end_time",
+    "total_latency_seconds",
+    "cases_run",
+    "cases_passed",
+    "cases_failed",
+    "notes"
+  ],
+  "properties": {
+    "runner_requested": {
+      "type": "string",
+      "description": "用户请求的runner类型",
+      "enum": ["sdk", "cli", "auto", "manual"],
+      "examples": ["sdk", "auto"]
+    },
+    "runner_actual": {
+      "type": "string",
+      "description": "实际使用的runner类型",
+      "enum": ["sdk", "cli", "manual", "none"],
+      "examples": ["cli"]
+    },
+    "runner_fallback_chain": {
+      "type": "array",
+      "description": "Runner fallback链路，记录从请求到实际使用的完整降级路径",
+      "items": {
+        "type": "object",
+        "required": ["step", "from", "to", "reason"],
+        "properties": {
+          "step": {
+            "type": "integer",
+            "description": "Fallback步骤序号，从1开始"
+          },
+          "from": {
+            "type": "string",
+            "description": "Fallback源runner"
+          },
+          "to": {
+            "type": "string",
+            "description": "Fallback目标runner"
+          },
+          "reason": {
+            "type": "string",
+            "description": "触发fallback的原因"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Fallback发生时间，ISO-8601格式"
+          }
+        }
+      },
+      "examples": [
+        [
+          {
+            "step": 1,
+            "from": "sdk",
+            "to": "cli",
+            "reason": "SDK ImportError: kimi_agent not found",
+            "timestamp": "2026-04-25T10:15:30Z"
+          }
+        ]
+      ]
+    },
+    "sdk_available": {
+      "type": "boolean",
+      "description": "SDK是否可用"
+    },
+    "cli_available": {
+      "boolean": true,
+      "type": "boolean",
+      "description": "CLI是否可用"
+    },
+    "sdk_version": {
+      "type": ["string", "null"],
+      "description": "SDK版本号，null表示SDK不可用",
+      "examples": ["1.2.3", null]
+    },
+    "cli_version": {
+      "type": ["string", "null"],
+      "description": "CLI版本号，null表示CLI不可用",
+      "examples": ["0.9.1", null]
+    },
+    "model_name": {
+      "type": "string",
+      "description": "使用的模型名称",
+      "examples": ["kimi-k2", "kimi-k1.5"]
+    },
+    "pack_version": {
+      "type": "string",
+      "description": "Agent Pack版本号",
+      "examples": ["v1.1.0"]
+    },
+    "start_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "运行开始时间，ISO-8601格式"
+    },
+    "end_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "运行结束时间，ISO-8601格式"
+    },
+    "total_latency_seconds": {
+      "type": "number",
+      "description": "总运行耗时（秒），包含所有case和fallback时间",
+      "minimum": 0
+    },
+    "cases_run": {
+      "type": "number",
+      "description": "执行的测试用例数量",
+      "minimum": 0
+    },
+    "cases_passed": {
+      "type": "number",
+      "description": "通过的测试用例数量",
+      "minimum": 0
+    },
+    "cases_failed": {
+      "type": "number",
+      "description": "失败的测试用例数量",
+      "minimum": 0
+    },
+    "notes": {
+      "type": "string",
+      "description": "运行备注信息，可包含环境说明、特殊事件等"
+    },
+    "environment": {
+      "type": "object",
+      "description": "运行环境信息（可选）",
+      "properties": {
+        "os": {
+          "type": "string",
+          "description": "操作系统信息"
+        },
+        "python_version": {
+          "type": "string",
+          "description": "Python版本号"
+        },
+        "hostname": {
+          "type": "string",
+          "description": "主机名"
+        }
+      }
+    },
+    "structured_output_config": {
+      "type": "object",
+      "description": "结构化输出配置（可选）",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["json_mode", "structured_output", "text"],
+          "description": "使用的结构化输出模式"
+        },
+        "schema_validated": {
+          "type": "boolean",
+          "description": "是否通过了schema验证"
+        },
+        "validation_errors": {
+          "type": ["array", "null"],
+          "description": "Schema验证错误列表",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "runner_requested": "auto",
+      "runner_actual": "cli",
+      "runner_fallback_chain": [
+        {
+          "step": 1,
+          "from": "sdk",
+          "to": "cli",
+          "reason": "SDK ImportError",
+          "timestamp": "2026-04-25T10:15:30Z"
+        }
+      ],
+      "sdk_available": false,
+      "cli_available": true,
+      "sdk_version": null,
+      "cli_version": "0.9.1",
+      "model_name": "kimi-k2",
+      "pack_version": "v1.1.0",
+      "start_time": "2026-04-25T10:15:00Z",
+      "end_time": "2026-04-25T10:20:00Z",
+      "total_latency_seconds": 300.5,
+      "cases_run": 5,
+      "cases_passed": 4,
+      "cases_failed": 1,
+      "notes": "SDK不可用，降级到CLI完成所有测试。"
+    }
+  ]
+}

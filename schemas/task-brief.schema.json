@@ -1,0 +1,159 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi-moonshot.ai/schemas/task-brief.schema.json",
+  "title": "Task Brief",
+  "description": "Schema for a task brief issued to the agent or coordinator",
+  "type": "object",
+  "required": [
+    "goal",
+    "deliverables",
+    "input_materials",
+    "constraints",
+    "required_capabilities",
+    "need_web",
+    "need_code",
+    "need_file_write",
+    "need_subagents",
+    "risk_assumptions",
+    "minimal_plan"
+  ],
+  "properties": {
+    "goal": {
+      "type": "string",
+      "description": "Clear, unambiguous objective of the task"
+    },
+    "deliverables": {
+      "type": "array",
+      "description": "List of expected outputs or deliverables",
+      "items": {
+        "type": "object",
+        "required": ["name", "format", "description"],
+        "properties": {
+          "name": { "type": "string" },
+          "format": { "type": "string" },
+          "description": { "type": "string" },
+          "optional": { "type": "boolean", "default": false }
+        }
+      }
+    },
+    "input_materials": {
+      "type": "array",
+      "description": "List of input materials provided to the agent",
+      "items": {
+        "type": "object",
+        "required": ["type", "content"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["text", "file", "url", "image", "table", "code"]
+          },
+          "content": { "type": "string" },
+          "filename": { "type": "string" },
+          "url": { "type": "string", "format": "uri" }
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "description": "Constraints and boundaries for the task execution",
+      "properties": {
+        "max_steps": { "type": "integer", "minimum": 1 },
+        "deadline": { "type": "string", "format": "date-time" },
+        "budget_tokens": { "type": "integer", "minimum": 1 },
+        "no_go_topics": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "style_guide": { "type": "string" },
+        "compliance_requirements": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "required_capabilities": {
+      "type": "array",
+      "description": "Capabilities required to complete the task",
+      "items": {
+        "type": "string",
+        "enum": [
+          "web_search",
+          "web_browse",
+          "code_execution",
+          "file_io",
+          "data_analysis",
+          "image_generation",
+          "subagent_orchestration",
+          "memory_access",
+          "tool_use"
+        ]
+      }
+    },
+    "need_web": {
+      "type": "boolean",
+      "description": "Whether the task requires web access"
+    },
+    "need_code": {
+      "type": "boolean",
+      "description": "Whether the task requires code execution"
+    },
+    "need_file_write": {
+      "type": "boolean",
+      "description": "Whether the task requires writing files"
+    },
+    "need_subagents": {
+      "type": "boolean",
+      "description": "Whether the task requires sub-agent delegation"
+    },
+    "risk_assumptions": {
+      "type": "array",
+      "description": "Known risks and assumptions for this task",
+      "items": {
+        "type": "object",
+        "required": ["type", "description"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["risk", "assumption", "dependency"]
+          },
+          "description": { "type": "string" },
+          "mitigation": { "type": "string" },
+          "severity": {
+            "type": "string",
+            "enum": ["low", "medium", "high", "critical"]
+          }
+        }
+      }
+    },
+    "minimal_plan": {
+      "type": "array",
+      "description": "Minimal execution plan with key milestones",
+      "items": {
+        "type": "object",
+        "required": ["step", "action"],
+        "properties": {
+          "step": { "type": "integer", "minimum": 1 },
+          "action": { "type": "string" },
+          "depends_on": {
+            "type": "array",
+            "items": { "type": "integer" }
+          },
+          "estimated_effort": { "type": "string" }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "version": { "type": "string" },
+        "created_at": { "type": "string", "format": "date-time" },
+        "task_id": { "type": "string" },
+        "priority": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "urgent"]
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

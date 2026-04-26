@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi.agent.pack/schemas/memory-conflict.schema.json",
+  "title": "Memory Conflict",
+  "description": "记录memory-entry之间的冲突及解决方案",
+  "type": "object",
+  "required": ["conflict_id", "entry_a", "entry_b", "conflict_type", "status"],
+  "properties": {
+    "conflict_id": {
+      "type": "string",
+      "description": "唯一标识符，格式：conflict-{timestamp}-{hash}",
+      "pattern": "^conflict-[0-9]{8}-[a-f0-9]{6,}$"
+    },
+    "entry_a": {
+      "type": "string",
+      "description": "冲突一方的entry_id"
+    },
+    "entry_b": {
+      "type": "string",
+      "description": "冲突另一方的entry_id"
+    },
+    "conflict_type": {
+      "type": "string",
+      "description": "冲突类型",
+      "enum": ["contradiction", "redundancy", "complementary"]
+    },
+    "description": {
+      "type": "string",
+      "description": "冲突的详细描述"
+    },
+    "resolution": {
+      "type": "object",
+      "description": "冲突解决方案（status为resolved时必填）",
+      "required": ["action", "resolved_by", "resolved_at"],
+      "properties": {
+        "action": {
+          "type": "string",
+          "description": "解决动作",
+          "enum": ["keep_both", "deprecate_a", "deprecate_b", "deprecate_both", "merge", "manual_review"]
+        },
+        "notes": {
+          "type": "string",
+          "description": "解决方案的说明"
+        },
+        "resolved_by": {
+          "type": "string",
+          "description": "解决冲突的agent名称"
+        },
+        "resolved_at": {
+          "type": "string",
+          "description": "解决时间，ISO 8601格式",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false
+    },
+    "status": {
+      "type": "string",
+      "description": "冲突处理状态",
+      "enum": ["open", "resolved", "escalated"]
+    },
+    "detected_at": {
+      "type": "string",
+      "description": "冲突检测时间，ISO 8601格式",
+      "format": "date-time"
+    },
+    "detected_by": {
+      "type": "string",
+      "description": "检测冲突的agent或脚本名称"
+    }
+  },
+  "additionalProperties": false
+}

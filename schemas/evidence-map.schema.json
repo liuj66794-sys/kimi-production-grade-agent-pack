@@ -1,0 +1,152 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi-moonshot.ai/schemas/evidence-map.schema.json",
+  "title": "Evidence Map",
+  "description": "Schema for tracking claims, evidence sources, and conflicts across research tasks",
+  "type": "object",
+  "required": ["claims", "sources", "conflicts"],
+  "properties": {
+    "claims": {
+      "type": "array",
+      "description": "List of claims extracted from the research",
+      "items": {
+        "type": "object",
+        "required": ["claim_id", "claim_text", "evidence_refs", "confidence", "status"],
+        "properties": {
+          "claim_id": {
+            "type": "string",
+            "description": "Unique identifier for the claim"
+          },
+          "claim_text": {
+            "type": "string",
+            "description": "The actual claim statement"
+          },
+          "evidence_refs": {
+            "type": "array",
+            "description": "References to source_ids that support or refute this claim",
+            "items": { "type": "string" }
+          },
+          "confidence": {
+            "type": "string",
+            "enum": ["high", "medium", "low", "uncertain"],
+            "description": "Overall confidence in the claim"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["verified", "partially_verified", "disputed", "unverified", "rejected"],
+            "description": "Verification status of the claim"
+          },
+          "topic": {
+            "type": "string",
+            "description": "Topic or category this claim belongs to"
+          },
+          "origin": {
+            "type": "string",
+            "description": "Where this claim originated (e.g., agent name, source)"
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "description": "List of evidence sources used in the research",
+      "items": {
+        "type": "object",
+        "required": ["source_id", "source_type", "reliability"],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "description": "Unique identifier for the source"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL if the source is a web page"
+          },
+          "path": {
+            "type": "string",
+            "description": "File path if the source is a local file"
+          },
+          "source_type": {
+            "type": "string",
+            "enum": [
+              "academic_paper",
+              "news_article",
+              "official_document",
+              "blog_post",
+              "database",
+              "api",
+              "book",
+              "human_expert",
+              "code_repository",
+              "unknown"
+            ],
+            "description": "Type of the source"
+          },
+          "reliability": {
+            "type": "string",
+            "enum": ["high", "medium", "low", "unverified"],
+            "description": "Assessed reliability of the source"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title or name of the source"
+          },
+          "date_accessed": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the source was accessed"
+          },
+          "credibility_factors": {
+            "type": "array",
+            "description": "Factors contributing to the reliability assessment",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "description": "List of conflicts between claims and their resolutions",
+      "items": {
+        "type": "object",
+        "required": ["claim_a", "claim_b", "resolution"],
+        "properties": {
+          "claim_a": {
+            "type": "string",
+            "description": "claim_id of the first conflicting claim"
+          },
+          "claim_b": {
+            "type": "string",
+            "description": "claim_id of the second conflicting claim"
+          },
+          "resolution": {
+            "type": "string",
+            "enum": ["a_favored", "b_favored", "both_valid", "both_invalid", "unresolved", "merged"],
+            "description": "Resolution status of the conflict"
+          },
+          "resolution_notes": {
+            "type": "string",
+            "description": "Explanation of the resolution"
+          },
+          "detected_by": {
+            "type": "string",
+            "description": "Agent or process that detected the conflict"
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "version": { "type": "string" },
+        "created_at": { "type": "string", "format": "date-time" },
+        "task_id": { "type": "string" },
+        "total_claims": { "type": "integer" },
+        "total_sources": { "type": "integer" },
+        "total_conflicts": { "type": "integer" }
+      }
+    }
+  },
+  "additionalProperties": false
+}

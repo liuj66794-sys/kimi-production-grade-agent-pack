@@ -1,0 +1,46 @@
+{
+  "goal": "example goal",
+  "deliverables": [
+    {
+      "name": "example-name",
+      "format": "example format",
+      "description": "example description",
+      "optional": true
+    }
+  ],
+  "input_materials": [
+    {
+      "type": "text",
+      "content": "example content",
+      "filename": "example-filename",
+      "url": "https://example.com"
+    }
+  ],
+  "constraints": {},
+  "required_capabilities": [
+    "item-required_capabilities-1"
+  ],
+  "need_web": true,
+  "need_code": true,
+  "need_file_write": true,
+  "need_subagents": true,
+  "risk_assumptions": [
+    {
+      "type": "risk",
+      "description": "example description",
+      "mitigation": "example mitigation",
+      "severity": "low"
+    }
+  ],
+  "minimal_plan": [
+    {
+      "step": 1,
+      "action": "example action",
+      "depends_on": [
+        1,
+        2
+      ],
+      "estimated_effort": "example estimated_effort"
+    }
+  ]
+}

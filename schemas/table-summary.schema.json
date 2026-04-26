@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi.agent/schemas/table-summary/v2.3.0",
+  "title": "Table Summary",
+  "description": "Human-readable summary of tabular data including overview, column narratives, data quality narrative, and key insights.",
+  "type": "object",
+  "required": ["filename", "overview", "columns", "data_quality_narrative"],
+  "properties": {
+    "filename": {
+      "type": "string",
+      "description": "Name of the source file"
+    },
+    "overview": {
+      "type": "string",
+      "description": "2-3 sentence natural language summary of the dataset",
+      "minLength": 10
+    },
+    "row_count_approx": {
+      "type": "string",
+      "description": "Approximate row count in plain language (e.g., 'about 50,000 rows')"
+    },
+    "column_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of columns"
+    },
+    "likely_domain": {
+      "type": "string",
+      "description": "Inferred domain or purpose of the data (e.g., 'e-commerce sales', 'user analytics')"
+    },
+    "columns": {
+      "type": "array",
+      "description": "Narrative description of each column",
+      "items": {
+        "type": "object",
+        "required": ["name", "description", "type", "completeness"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Column name"
+          },
+          "description": {
+            "type": "string",
+            "description": "One-sentence narrative description of the column"
+          },
+          "type": {
+            "type": "string",
+            "description": "Inferred data type"
+          },
+          "completeness": {
+            "type": "string",
+            "enum": ["Excellent", "Good", "Fair", "Poor", "Critical"],
+            "description": "Qualitative completeness rating"
+          },
+          "completeness_ratio": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "1 - null_ratio"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Notable observations about this column"
+          }
+        }
+      }
+    },
+    "data_quality_narrative": {
+      "type": "string",
+      "description": "2-3 sentence summary of overall data health in plain language"
+    },
+    "quality_rating": {
+      "type": "string",
+      "enum": ["Excellent", "Good", "Fair", "Poor", "Critical"],
+      "description": "Overall qualitative quality rating"
+    },
+    "key_insights": {
+      "type": "array",
+      "description": "Top auto-generated insights from the data",
+      "maxItems": 5,
+      "items": {
+        "type": "string"
+      }
+    },
+    "notable_observations": {
+      "type": "array",
+      "description": "Additional observations worth highlighting",
+      "items": {
+        "type": "string"
+      }
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

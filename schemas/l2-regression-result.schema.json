@@ -1,0 +1,158 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi.agent/schemas/l2-regression-result/v2.5.0",
+  "title": "L2 Regression Test Result",
+  "description": "Schema for L2 regression test execution results, covering L1 regression, L2 unit smoke tests, and hard-fail validation.",
+  "type": "object",
+  "required": ["suite_name", "executed_at", "cases", "l1_regression_passed", "l2_unit_smoke_passed", "hard_fail_count"],
+  "properties": {
+    "suite_name": {
+      "type": "string",
+      "description": "Name of the regression suite",
+      "enum": ["l1-only", "l2-unit-smoke", "l1-plus-l2-full", "l2-release-validation"]
+    },
+    "version": {
+      "type": "string",
+      "description": "Pack version under test",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "executed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Test execution timestamp"
+    },
+    "duration_seconds": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Total test execution time"
+    },
+    "cases": {
+      "type": "array",
+      "description": "Individual test case results",
+      "items": {
+        "type": "object",
+        "required": ["case_id", "pass"],
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "description": "Unique test case identifier",
+            "pattern": "^(L1|L2)-[A-Z]{2}-\\d{4}$"
+          },
+          "name": {
+            "type": "string",
+            "description": "Human-readable test case name"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["l1_regression", "l2_agent_config", "l2_skill_validation", "l2_schema_compliance", "l2_hard_fail", "l2_integration", "l2_security"],
+            "description": "Test case category"
+          },
+          "agent": {
+            "type": "string",
+            "enum": ["orchestrator", "memory", "slide-maker", "spreadsheet", "multimodal", "all"],
+            "description": "Agent under test"
+          },
+          "pass": {
+            "type": "boolean",
+            "description": "Whether the test case passed"
+          },
+          "score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Test score (0-100) for graded tests"
+          },
+          "duration_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Test execution time in milliseconds"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Additional notes about the test result"
+          },
+          "error": {
+            "type": "string",
+            "description": "Error message if test failed"
+          },
+          "hard_fail_triggered": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether a hard-fail rule was triggered during this test"
+          },
+          "hard_fail_rule_id": {
+            "type": "string",
+            "description": "ID of the hard-fail rule triggered",
+            "pattern": "^HF-[A-Z]{2}-\\d{2}$"
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "description": "Test run summary statistics",
+      "properties": {
+        "total_cases": { "type": "integer", "minimum": 0 },
+        "passed": { "type": "integer", "minimum": 0 },
+        "failed": { "type": "integer", "minimum": 0 },
+        "skipped": { "type": "integer", "minimum": 0 },
+        "hard_fail_triggered": { "type": "integer", "minimum": 0 },
+        "pass_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Percentage of tests that passed"
+        }
+      }
+    },
+    "l1_regression_passed": {
+      "type": "boolean",
+      "description": "Whether all L1 regression tests passed"
+    },
+    "l2_unit_smoke_passed": {
+      "type": "boolean",
+      "description": "Whether all L2 unit smoke tests passed"
+    },
+    "hard_fail_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of hard-fail rules triggered during test run"
+    },
+    "l1_regression_details": {
+      "type": "object",
+      "description": "Details of L1 regression test results",
+      "properties": {
+        "tests_run": { "type": "integer", "minimum": 0 },
+        "tests_passed": { "type": "integer", "minimum": 0 },
+        "tests_failed": { "type": "integer", "minimum": 0 },
+        "affected_orchestrator_functions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "L1 functions that showed regression"
+        }
+      }
+    },
+    "l2_agent_results": {
+      "type": "object",
+      "description": "Per-agent L2 test results",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "tests_run": { "type": "integer", "minimum": 0 },
+          "tests_passed": { "type": "integer", "minimum": 0 },
+          "tests_failed": { "type": "integer", "minimum": 0 },
+          "hard_fail_tests": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "overall_status": {
+      "type": "string",
+      "enum": ["passed", "failed", "partial"],
+      "description": "Overall test run status"
+    },
+    "report_path": {
+      "type": "string",
+      "description": "Path to detailed regression report"
+    }
+  }
+}

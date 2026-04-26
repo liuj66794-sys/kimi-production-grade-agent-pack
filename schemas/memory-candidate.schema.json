@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi.agent.pack/schemas/memory-candidate.schema.json",
+  "title": "Memory Candidate",
+  "description": "从任务执行中提取的可复用经验候选条目，必须经过review才能进入memory-index",
+  "type": "object",
+  "required": ["candidate_id", "source_task", "source_agent", "content_type", "content", "source", "confidence", "risk", "created_at"],
+  "properties": {
+    "candidate_id": {
+      "type": "string",
+      "description": "唯一标识符，格式：cand-{timestamp}-{hash}",
+      "pattern": "^cand-[0-9]{8}-[a-f0-9]{6,}$"
+    },
+    "source_task": {
+      "type": "string",
+      "description": "来源任务ID，必须指向真实存在的任务",
+      "minLength": 1
+    },
+    "source_agent": {
+      "type": "string",
+      "description": "执行该任务的agent名称",
+      "minLength": 1
+    },
+    "content_type": {
+      "type": "string",
+      "description": "经验内容的分类类型",
+      "enum": ["pattern", "template", "rule", "reference", "lesson"]
+    },
+    "content": {
+      "type": "string",
+      "description": "经验内容的详细描述，应具体且可操作",
+      "minLength": 10
+    },
+    "source": {
+      "type": "string",
+      "description": "具体来源（文件路径/对话轮次/任务记录），必须可追溯",
+      "minLength": 1
+    },
+    "confidence": {
+      "type": "string",
+      "description": "经验的可靠程度",
+      "enum": ["high", "medium", "low"]
+    },
+    "risk": {
+      "type": "string",
+      "description": "误用该经验可能带来的风险等级",
+      "enum": ["low", "medium", "high", "critical"]
+    },
+    "created_at": {
+      "type": "string",
+      "description": "创建时间，ISO 8601格式",
+      "format": "date-time"
+    },
+    "tags": {
+      "type": "array",
+      "description": "可选的标签列表，用于分类和检索",
+      "items": {
+        "type": "string"
+      }
+    },
+    "related_candidates": {
+      "type": "array",
+      "description": "相关的其他candidate ID列表",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}

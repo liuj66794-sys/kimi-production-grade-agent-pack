@@ -1,0 +1,14 @@
+{
+  "review_id": "id-001",
+  "candidate_id": "id-001",
+  "reviewer": "memory-reviewer",
+  "status": "approve",
+  "dimensions": [
+    {
+      "name": "source_reliability",
+      "score": 1,
+      "notes": "example notes"
+    }
+  ],
+  "reviewed_at": "2024-01-01T00:00:00Z"
+}

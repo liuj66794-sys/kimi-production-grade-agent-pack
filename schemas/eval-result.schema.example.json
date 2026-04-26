@@ -1,0 +1,14 @@
+{
+  "eval_id": "id-001",
+  "pack_version": "1.0.0",
+  "runner": "example runner",
+  "model_name": "example-model_name",
+  "run_timestamp": "2024-01-01T00:00:00Z",
+  "pass": true,
+  "hard_fail": true,
+  "score": 1.0,
+  "missing_fields": [
+    "item-missing_fields-1"
+  ],
+  "notes": "example notes"
+}

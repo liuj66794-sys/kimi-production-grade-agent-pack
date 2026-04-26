@@ -1,0 +1,128 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi-agent-pack/schemas/error-envelope.schema.json",
+  "title": "Error Envelope",
+  "description": "Unified error envelope for wrapping errors at all layers of the Kimi Production-Grade Agent Pack evaluation system.",
+  "type": "object",
+  "required": [
+    "error_id",
+    "layer",
+    "severity",
+    "message",
+    "user_visible_message",
+    "recoverable",
+    "retryable",
+    "fallback_action",
+    "affected_artifacts",
+    "next_step",
+    "raw_error_path"
+  ],
+  "properties": {
+    "error_id": {
+      "type": "string",
+      "description": "错误唯一标识，使用UUID v4格式",
+      "examples": ["550e8400-e29b-41d4-a716-446655440000"]
+    },
+    "layer": {
+      "type": "string",
+      "description": "错误发生的系统层级",
+      "enum": [
+        "plugin",
+        "mcp",
+        "script",
+        "skill",
+        "flow",
+        "subagent",
+        "coordinator"
+      ]
+    },
+    "severity": {
+      "type": "string",
+      "description": "错误严重程度级别",
+      "enum": [
+        "info",
+        "warning",
+        "recoverable",
+        "fatal"
+      ]
+    },
+    "message": {
+      "type": "string",
+      "description": "详细的内部错误描述，供调试使用"
+    },
+    "user_visible_message": {
+      "type": "string",
+      "description": "面向用户的友好错误提示信息"
+    },
+    "recoverable": {
+      "type": "boolean",
+      "description": "错误是否可恢复，true表示可以通过fallback或重试继续执行"
+    },
+    "retryable": {
+      "type": "boolean",
+      "description": "错误是否可以通过重试解决，true表示重试可能成功"
+    },
+    "fallback_action": {
+      "type": ["string", "null"],
+      "description": "触发的fallback操作名称，null表示无可用fallback",
+      "examples": ["cli", "alternative_path", "memory_buffer", "manual-smoke-required"]
+    },
+    "affected_artifacts": {
+      "type": "array",
+      "description": "受此错误影响的文件路径或构件列表",
+      "items": {
+        "type": "string"
+      }
+    },
+    "next_step": {
+      "type": "string",
+      "description": "错误发生后建议的下一步操作",
+      "examples": [
+        "cli_fallback",
+        "memory_buffer_end_of_task",
+        "manual-smoke-required",
+        "continue",
+        "retry_read"
+      ]
+    },
+    "raw_error_path": {
+      "type": ["string", "null"],
+      "description": "原始错误日志文件的路径，null表示未保存原始错误"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "错误发生时间，ISO-8601格式（可选，自动生成）"
+    },
+    "run_id": {
+      "type": "string",
+      "description": "关联的运行ID，用于追踪错误属于哪次测试运行（可选）"
+    },
+    "sdk_version": {
+      "type": ["string", "null"],
+      "description": "发生错误时使用的SDK版本（可选）"
+    },
+    "model_name": {
+      "type": ["string", "null"],
+      "description": "发生错误时使用的模型名称（可选）"
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "error_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "layer": "script",
+      "severity": "recoverable",
+      "message": "Run 1 SDK timeout after 120s",
+      "user_visible_message": "第1次运行发生SDK超时，正在尝试fallback。",
+      "recoverable": true,
+      "retryable": true,
+      "fallback_action": "cli",
+      "affected_artifacts": [
+        "evals/results/p0-pre/sdk-headless/run-001-raw.txt"
+      ],
+      "next_step": "cli_fallback",
+      "raw_error_path": "evals/results/p0-pre/sdk-headless/debug.log"
+    }
+  ]
+}

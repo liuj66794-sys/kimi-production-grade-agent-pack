@@ -1,0 +1,11 @@
+{
+  "candidate_id": "id-001",
+  "source_task": "example source_task",
+  "source_agent": "example source_agent",
+  "content_type": "pattern",
+  "content": "example content",
+  "source": "example source",
+  "confidence": "high",
+  "risk": "low",
+  "created_at": "2024-01-01T00:00:00Z"
+}

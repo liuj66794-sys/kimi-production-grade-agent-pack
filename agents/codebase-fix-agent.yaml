@@ -1,0 +1,13 @@
+version: "1.0.0"
+agent:
+  name: codebase-fix
+  description: Automated codebase issue detection and fixing
+  skills:
+    - codebase-fix
+    - code-builder
+    - swarm-orchestrator
+    - task-intake
+    - quality-review
+  subagents:
+    - coder
+    - qa-reviewer

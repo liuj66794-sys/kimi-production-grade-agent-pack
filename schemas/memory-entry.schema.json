@@ -1,0 +1,128 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi.agent.pack/schemas/memory-entry.schema.json",
+  "title": "Memory Entry",
+  "description": "已批准进入memory-index的长期记忆条目，默认read-only",
+  "type": "object",
+  "required": ["entry_id", "candidate_ref", "approved_by", "approved_at", "status"],
+  "properties": {
+    "entry_id": {
+      "type": "string",
+      "description": "唯一标识符，格式：entry-{timestamp}-{hash}",
+      "pattern": "^entry-[0-9]{8}-[a-f0-9]{4,}$"
+    },
+    "candidate_ref": {
+      "type": "string",
+      "description": "关联的candidate_id"
+    },
+    "approved_by": {
+      "type": "string",
+      "description": "批准该entry的reviewer名称",
+      "enum": ["memory-reviewer"]
+    },
+    "approved_at": {
+      "type": "string",
+      "description": "批准时间，ISO 8601格式",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "description": "条目状态",
+      "enum": ["active", "deprecated", "retracted"]
+    },
+    "access_count": {
+      "type": "integer",
+      "description": "被检索/引用的次数",
+      "minimum": 0,
+      "default": 0
+    },
+    "last_accessed_at": {
+      "type": "string",
+      "description": "最后被访问时间，ISO 8601格式",
+      "format": "date-time"
+    },
+    "deprecated_info": {
+      "type": "object",
+      "description": "当status为deprecated时的补充信息",
+      "required": ["reason", "deprecated_at"],
+      "properties": {
+        "reason": {
+          "type": "string",
+          "description": "deprecated原因"
+        },
+        "deprecated_at": {
+          "type": "string",
+          "description": "标记deprecated的时间",
+          "format": "date-time"
+        },
+        "deprecated_by": {
+          "type": "string",
+          "description": "执行deprecated操作的agent"
+        }
+      },
+      "additionalProperties": false
+    },
+    "retraction_info": {
+      "type": "object",
+      "description": "当status为retracted时的补充信息",
+      "required": ["reason", "retracted_at", "retracted_by"],
+      "properties": {
+        "reason": {
+          "type": "string",
+          "description": "retraction原因",
+          "enum": ["factual_error", "security_risk", "outdated", "conflicting", "superseded"]
+        },
+        "detail": {
+          "type": "string",
+          "description": "retraction的详细说明"
+        },
+        "retracted_at": {
+          "type": "string",
+          "description": "retraction时间",
+          "format": "date-time"
+        },
+        "retracted_by": {
+          "type": "string",
+          "description": "执行retraction的reviewer"
+        },
+        "replacement_entry": {
+          "type": "string",
+          "description": "替代该entry的新entry ID（如有）"
+        }
+      },
+      "additionalProperties": false
+    },
+    "content": {
+      "type": "object",
+      "description": "从candidate继承的内容数据",
+      "required": ["source_task", "source_agent", "content_type", "content", "source", "confidence", "risk", "created_at"],
+      "properties": {
+        "source_task": { "type": "string" },
+        "source_agent": { "type": "string" },
+        "content_type": {
+          "type": "string",
+          "enum": ["pattern", "template", "rule", "reference", "lesson"]
+        },
+        "content": { "type": "string" },
+        "source": { "type": "string" },
+        "confidence": {
+          "type": "string",
+          "enum": ["high", "medium", "low"]
+        },
+        "risk": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "critical"]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

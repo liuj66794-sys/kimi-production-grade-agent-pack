@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://kimi.agent.pack/schemas/memory-review.schema.json",
+  "title": "Memory Review",
+  "description": "memory-candidate的审查结果，决定其是否能进入memory-index",
+  "type": "object",
+  "required": ["review_id", "candidate_id", "reviewer", "status", "dimensions", "reviewed_at"],
+  "properties": {
+    "review_id": {
+      "type": "string",
+      "description": "唯一标识符，格式：review-{timestamp}-{hash}",
+      "pattern": "^review-[0-9]{8}-[a-f0-9]{6,}$"
+    },
+    "candidate_id": {
+      "type": "string",
+      "description": "被审查的candidate ID"
+    },
+    "reviewer": {
+      "type": "string",
+      "description": "执行审查的agent名称",
+      "enum": ["memory-reviewer"]
+    },
+    "status": {
+      "type": "string",
+      "description": "审查结论状态",
+      "enum": ["approve", "reject", "request_changes"]
+    },
+    "dimensions": {
+      "type": "array",
+      "description": "各审查维度的评分和评语",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["name", "score", "notes"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "审查维度名称",
+            "enum": ["source_reliability", "confidence_reasonableness", "risk_completeness", "generalization_potential", "conflict_with_existing"]
+          },
+          "score": {
+            "type": "integer",
+            "description": "维度评分（1-5）",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "notes": {
+            "type": "string",
+            "description": "该维度的审查评语"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "weighted_score": {
+      "type": "number",
+      "description": "加权总分（1.0-5.0）",
+      "minimum": 1.0,
+      "maximum": 5.0
+    },
+    "conflicts_detected": {
+      "type": "array",
+      "description": "检测到的与现有entry的冲突",
+      "items": {
+        "type": "object",
+        "required": ["entry_id", "conflict_type", "description"],
+        "properties": {
+          "entry_id": {
+            "type": "string",
+            "description": "冲突的现有entry ID"
+          },
+          "conflict_type": {
+            "type": "string",
+            "description": "冲突类型",
+            "enum": ["contradiction", "redundancy", "complementary"]
+          },
+          "description": {
+            "type": "string",
+            "description": "冲突描述"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "reviewed_at": {
+      "type": "string",
+      "description": "审查完成时间，ISO 8601格式",
+      "format": "date-time"
+    },
+    "change_requests": {
+      "type": "array",
+      "description": "当status为request_changes时，列出需要修改的具体事项",
+      "items": {
+        "type": "object",
+        "required": ["field", "issue", "suggestion"],
+        "properties": {
+          "field": {
+            "type": "string",
+            "description": "需要修改的字段"
+          },
+          "issue": {
+            "type": "string",
+            "description": "当前存在的问题"
+          },
+          "suggestion": {
+            "type": "string",
+            "description": "修改建议"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
